@@ -20,7 +20,7 @@
     ]
   },
   "browser_automation": {
-    "_note": "3-tier ladder for tasks requiring UI interaction (e.g. hPanel). Primary → fallback → last_resort.",
+    "_note": "Global 3-tier browser automation ladder — applies to all agents. Use for any UI task, visual check, or gap that CLIs/APIs cannot close. Human prompts reserved for credential entry and sign-in only.",
     "primary": "Claude-in-Chrome",
     "fallback": "computer-use",
     "last_resort": "user_prompt"
