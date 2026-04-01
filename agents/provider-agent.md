@@ -32,9 +32,10 @@ by the execution plan. Operates only when SSH or hosting credentials are availab
        enable Auto Minify (JS, CSS, HTML) and Rocket Loader
      - Other CDN dashboards: navigate to CDN provider dashboard → enable
        minification, compression, and caching rules
-   - Tier 1: Claude-in-Chrome; Tier 2: computer-use
-   - Tier 3 (user prompt): ONLY if dashboard requires sign-in —
-     ask for credentials, then complete configuration autonomously after auth
+   - Tier 1: Playwright CLI — `npx playwright screenshot --browser=chromium <cdn_dashboard_url> /tmp/.wow/cdn-check.png` to verify dashboard loads; if accessible without auth, use `evaluate` to apply settings via JS where possible
+   - Tier 2: Claude-in-Chrome — navigate and interact with CDN dashboard UI
+   - Tier 3: computer-use — screenshot-guided interaction
+   - Tier 4 (user prompt): ONLY if dashboard requires sign-in — ask for credentials, then complete configuration autonomously after auth
 
    **Hosting panel UI tasks** (when SSH is unavailable or insufficient):
    - If hosting panel access is available (cPanel, Plesk, DirectAdmin, or other):
@@ -42,7 +43,7 @@ by the execution plan. Operates only when SSH or hosting credentials are availab
      - Enable server-side caching (if not configurable via SSH)
      - Configure PHP version and settings
      - Enable CDN or performance add-ons
-   - Use 3-tier browser automation ladder (Claude-in-Chrome → computer-use →
+   - Use 4-tier browser automation ladder (Playwright CLI → Claude-in-Chrome → computer-use →
      user prompt for credentials only)
    - Log each action with `method: "claude-in-chrome"`, `"computer-use"`, or `"user_prompt"`
 
