@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "brainstorm",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["/Users/shafqat/.claude/plugins/cache/superpowers-marketplace/superpowers/5.0.5/skills/brainstorming/scripts/server.cjs", "--port", "50232", "--screen-dir", "/Users/shafqat/Documents/Projects/CodersTrust/wordpress-optimization/.superpowers/brainstorm/59702-1775073608"],
+      "port": 50232
+    }
+  ]
+}
