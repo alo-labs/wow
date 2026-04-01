@@ -30,6 +30,33 @@ Before doing anything, invoke all bundled community skills to load domain knowle
 
 If any skill fails to load, note it but continue — do not abort.
 
+### 1b. Browser automation policy
+
+Claude-in-Chrome is available as a first-class tool at every phase of the
+optimization loop. Any agent — at any point — may invoke it to complete
+tasks that skills, CLIs, or APIs cannot accomplish, or to perform visual
+checks. No agent should report a task as failed or skip it solely because
+a CLI or API is unavailable.
+
+**3-tier automation ladder (applies globally to all agents):**
+- Tier 1: Claude-in-Chrome (`mcp__Claude_in_Chrome__*`) — primary
+- Tier 2: computer-use (`mcp__computer-use__*`) — fallback
+- Tier 3: user prompt — ONLY for credential entry or sign-in
+
+**Human intervention policy:**
+The human operating WOW is only asked for:
+1. Credentials (passwords, API keys, tokens)
+2. Sign-in (when a browser session requires authentication)
+
+The human is NEVER asked to: click buttons, navigate menus, configure
+settings, enable features, or perform any action that browser automation
+can accomplish. All such tasks must be attempted via Tier 1 and Tier 2
+before escalating.
+
+If Claude-in-Chrome is not installed or not signed in, note it but
+continue — Tier 2 (computer-use) handles this case. Only escalate to
+the user if both tiers are unavailable AND credentials are required.
+
 ### 2. Initialize session state
 
 Create `/tmp/.wow/` directory. Initialize `session.json`:
