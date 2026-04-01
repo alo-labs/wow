@@ -111,16 +111,8 @@ Otherwise increment `current_iteration` in session.json and loop back to PLAN.
 
 ### 6. Generate REPORT
 
-Read `baseline.json` and all `iterations/*/delta.json` files.
-Read `iterations/*/actions.json` for the complete change log.
-
-Produce a final report covering:
-- Before/after Lighthouse Performance, Accessibility, Best Practices, SEO scores
-- Before/after Core Web Vitals (LCP, CLS, INP)
-- Total iterations run and why the loop stopped
-- All changes applied (grouped by domain: plugins, hosting, custom)
-- Any remaining gaps with explanation of why they could not be closed
-- Before/after screenshot references
+Invoke `@wow-report`. Wait for it to complete.
+The report is emitted to the terminal and saved to `/tmp/.wow/report.html`.
 
 ### 7. Last-resort intervention
 
