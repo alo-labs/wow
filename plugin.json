@@ -1,0 +1,33 @@
+{
+  "name": "wow",
+  "version": "0.1.0",
+  "description": "WOW — WordPress → Optimized WordPress. Autonomous Claude Code plugin for world-class WordPress performance optimization.",
+  "author": "Shafqat Ullah",
+  "email": "shafqat@sourcevo.com",
+  "organization": "Ālo Labs",
+  "homepage": "https://alolabs.dev",
+  "repository": "https://github.com/alo-labs/wow",
+  "license": "MIT",
+  "skills": [
+    "skills/wow",
+    "skills/wow-intake",
+    "skills/wow-audit",
+    "skills/wow-plan",
+    "skills/wow-execute",
+    "skills/wow-verify"
+  ],
+  "install_hook": "scripts/install.sh",
+  "dependencies": {
+    "required": ["jq"],
+    "skills": [
+      "wordpress/agent-skills@wp-performance",
+      "jeffallan/claude-skills@wordpress-pro",
+      "addyosmani/web-quality-skills@core-web-vitals",
+      "addyosmani/web-quality-skills@performance",
+      "addyosmani/web-quality-skills@best-practices"
+    ],
+    "mcp_servers": [
+      "priyankark/lighthouse-mcp"
+    ]
+  }
+}
