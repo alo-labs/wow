@@ -28,7 +28,14 @@ Launch all three agents simultaneously using the Agent tool.
 Only dispatch an agent if it has at least one action assigned.
 
 - **plugin-agent**: Read `agents/plugin-agent.md`. Pass: plugin-domain actions, WP credentials from session context, site URL.
-- **provider-agent**: Read `agents/provider-agent.md`. Pass: provider-domain actions, SSH/hosting credentials from session context, site URL, inventory from audit.json.
+- **provider-agent**:
+  - Read `iterations/N/inventory.json` → check `hosting_provider`
+  - If `hosting_provider == "hostinger"`:
+    → Read `agents/providers/hostinger-agent.md`
+  - Else:
+    → Read `agents/provider-agent.md`
+  - Pass: provider-domain actions, SSH/hosting credentials from session context,
+    site URL, full inventory from audit.json.
 - **custom-agent**: Read `agents/custom-agent.md`. Pass: custom-domain actions, SSH credentials from session context, site URL.
 
 ### 3. Wait for all agents
@@ -38,6 +45,8 @@ Do not proceed until all dispatched agents have returned.
 ### 4. Save executed actions
 
 Merge agent reports into `/tmp/.wow/iterations/N/actions.json`:
+
+If Hostinger agent was dispatched, also merge `/tmp/.wow/iterations/N/hostinger-actions.json` into the `applied` array.
 
 ```json
 {
