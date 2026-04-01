@@ -23,6 +23,14 @@ PHP version, server software, and hosting provider detection.
    - Check headers, known IP ranges, and server software signatures
    - Map to: hostinger | wpengine | kinsta | siteground | bluehost | cloudways | unknown
 
+4b. If `hosting_provider == "hostinger"`, detect plan tier:
+   - VPS indicators: response headers `X-Hostinger-VPS: 1`, PTR record matching
+     `vps*.hostinger.com`, or IP range `31.170.160.0/20`
+   - Cloud/Business indicators: `X-Hostinger-Plan` header containing "business"
+     or "cloud", or subdomain `*.hostinger.website`
+   - Default: `shared`
+   - If `hosting_provider != "hostinger"`: omit `plan_tier` or set to `""` (empty string)
+
 5. Return as JSON and write to `/tmp/.wow/iterations/N/inventory.json`:
 ```json
 {
@@ -31,6 +39,7 @@ PHP version, server software, and hosting provider detection.
   "php_version": "",
   "web_server": "",
   "hosting_provider": "",
+  "plan_tier": "shared|cloud|vps",
   "cdn_detected": false,
   "litespeed_present": false,
   "object_cache_present": false
