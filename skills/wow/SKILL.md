@@ -30,32 +30,46 @@ Before doing anything, invoke all bundled community skills to load domain knowle
 
 If any skill fails to load, note it but continue — do not abort.
 
-### 1b. Browser automation policy
+### 1b. CLI-first principle and browser automation policy
 
-Claude-in-Chrome is available as a first-class tool at every phase of the
-optimization loop. Any agent — at any point — may invoke it to complete
-tasks that skills, CLIs, or APIs cannot accomplish, or to perform visual
-checks. No agent should report a task as failed or skip it solely because
-a CLI or API is unavailable.
+**CLI-first rule (global — applies to all agents):**
+Whenever a CLI alternative exists, use it instead of an MCP or interactive
+browser tool. CLIs are faster, cheaper (fewer tokens), more reliable, and
+more composable.
 
-**3-tier automation ladder (applies globally to all agents):**
-- Tier 1: Claude-in-Chrome (`mcp__Claude_in_Chrome__*`) — primary
-- Tier 2: computer-use (`mcp__computer-use__*`) — fallback
-- Tier 3: user prompt — ONLY for credential entry or sign-in
+**Task domain mapping:**
+
+| Domain | Primary tool | Fallback |
+|---|---|---|
+| WP tasks (plugins, options, DB, users) | WP-CLI via SSH | WP REST API → browser automation |
+| Server tasks (PHP-FPM, OPcache, htaccess, nginx) | SSH only | None — WP-CLI does not apply here |
+| Browser tasks (screenshots, UI forms, hosting panels, WP Admin) | Playwright CLI | Claude-in-Chrome → computer-use → user prompt |
+
+**4-tier browser automation ladder (applies globally to all agents):**
+
+**Tier 1 — Playwright CLI:**
+- Check: `npx playwright --version >/dev/null 2>&1`
+- If available: `npx playwright screenshot --browser=chromium --full-page <url> <path>`
+  or `npx playwright evaluate --browser=chromium <url> "<js_expression>"`
+- If command exits non-zero or Playwright not found: fall through to Tier 2
+
+**Tier 2 — Claude-in-Chrome:**
+- Check: is `mcp__Claude_in_Chrome__navigate` callable?
+- If yes: use for tasks requiring interactive or visual judgment
+- If tool call raises error or returns failure: fall through to Tier 3
+
+**Tier 3 — computer-use:**
+- Check: is `mcp__computer-use__screenshot` callable?
+- If yes: screenshot-guided interaction; if failure: fall through to Tier 4
+
+**Tier 4 — user prompt (credentials and sign-in ONLY):**
+- Ask the human ONLY for: passwords, API keys, tokens, or authentication steps
+- NEVER ask the human to click, navigate, configure, or perform any automatable action
 
 **Human intervention policy:**
-The human operating WOW is only asked for:
-1. Credentials (passwords, API keys, tokens)
-2. Sign-in (when a browser session requires authentication)
-
-The human is NEVER asked to: click buttons, navigate menus, configure
-settings, enable features, or perform any action that browser automation
-can accomplish. All such tasks must be attempted via Tier 1 and Tier 2
-before escalating.
-
-If Claude-in-Chrome is not installed or not signed in, note it but
-continue — Tier 2 (computer-use) handles this case. Only escalate to
-the user if both tiers are unavailable AND credentials are required.
+The human operating WOW is only asked for credentials and sign-in. All UI
+tasks must be attempted via Tiers 1–3 before escalating. No agent should
+report a task as failed or skip it solely because a CLI or API is unavailable.
 
 ### 2. Initialize session state
 
