@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # validate-plugin.sh — verifies WOW plugin structure and JSON validity
 set -e
+SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$SCRIPT_DIR"
+command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required. Install: brew install jq (macOS) / apt install jq (Linux)"; exit 1; }
 PASS=0; FAIL=0
 
 check() {
@@ -13,8 +16,7 @@ check() {
 }
 
 file_exists() { [ -f "$1" ] && echo "ok" || echo "missing: $1"; }
-dir_exists()  { [ -d "$1" ] && echo "ok" || echo "missing dir: $1"; }
-valid_json()  { jq empty "$1" 2>&1 >/dev/null && echo "ok" || echo "invalid JSON: $1"; }
+valid_json()  { jq empty "$1" >/dev/null 2>&1 && echo "ok" || echo "invalid JSON: $1"; }
 has_section() { grep -q "^## $2" "$1" 2>/dev/null && echo "ok" || echo "missing '## $2' in $1"; }
 
 echo "=== WOW Plugin Validation ==="
