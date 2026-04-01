@@ -44,6 +44,12 @@ npm install -g lighthouse-mcp \
   && echo "  ✓ lighthouse-mcp" || echo "  ⚠ lighthouse-mcp install failed"
 
 echo ""
+echo "--- Installing Playwright CLI browser (for browser automation) ---"
+
+npx playwright install --with-deps chromium \
+  && echo "  ✓ playwright" || echo "  ⚠ playwright install failed (non-fatal)"
+
+echo ""
 echo "--- Configuring lighthouse MCP in Claude config ---"
 
 CLAUDE_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
@@ -66,5 +72,3 @@ fi
 
 echo ""
 echo "⚡ WOW installed. Restart Claude Code / Claude Desktop, then run /wow to start."
-echo ""
-echo "ℹ Note: browser MCP and WP-CLI MCP are PENDING evaluation. Check https://github.com/alo-labs/wow for updates."
