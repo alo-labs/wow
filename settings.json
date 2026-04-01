@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(dirname \"$0\")/hooks/phase-enforcer.sh\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(dirname \"$0\")/hooks/loop-controller.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(dirname \"$0\")/hooks/progress-reporter.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
