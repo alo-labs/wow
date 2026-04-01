@@ -39,4 +39,4 @@ as directed by the execution plan.
 - Only install plugins with `free_only: true` compliance
 - Never install plugins requiring API keys or payment for core features
 - If WP-CLI, REST API, and browser automation all fail, report as `status: failed` — do not guess
-- Never ask the human to install or configure a plugin manually — exhaust all three methods first
+- Never ask the human to install or configure a plugin manually — exhaust all four methods first

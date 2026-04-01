@@ -45,6 +45,6 @@ by the execution plan. Operates only when SSH or hosting credentials are availab
      - Enable CDN or performance add-ons
    - Use 4-tier browser automation ladder (Playwright CLI → Claude-in-Chrome → computer-use →
      user prompt for credentials only)
-   - Log each action with `method: "claude-in-chrome"`, `"computer-use"`, or `"user_prompt"`
+   - Log each action with `method: "playwright-cli"`, `"claude-in-chrome"`, `"computer-use"`, or `"user_prompt"`
 
 3. Return actions.json fragment with status per action.
