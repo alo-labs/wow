@@ -8,9 +8,12 @@
     "best-practices": "addyosmani/web-quality-skills@best-practices"
   },
   "mcp_servers": {
-    "lighthouse": "priyankark/lighthouse-mcp",
-    "browser": "PENDING — free Playwright/Puppeteer MCP to be evaluated",
-    "wp-cli": "PENDING — free WP-CLI MCP to be evaluated"
+    "lighthouse": "priyankark/lighthouse-mcp"
+  },
+  "cli_tools": {
+    "_note": "CLI tools used directly — no MCP wrapper. CLIs are preferred over MCPs whenever a CLI alternative exists.",
+    "browser_automation": "playwright-cli — npx playwright screenshot/evaluate (install via scripts/install.sh)",
+    "wp_management": "wp-cli — native WP-CLI via SSH (wp plugin install, wp option update, wp db optimize, etc.)"
   },
   "provider_skills": {
     "_note": "Provider-specific skills keyed by hosting_provider value from inventory.json",
@@ -20,10 +23,11 @@
     ]
   },
   "browser_automation": {
-    "_note": "Global 3-tier browser automation ladder — applies to all agents. Use for any UI task, visual check, or gap that CLIs/APIs cannot close. Human prompts reserved for credential entry and sign-in only.",
-    "primary": "Claude-in-Chrome",
-    "fallback": "computer-use",
-    "last_resort": "user_prompt"
+    "_note": "4-tier browser automation ladder for all browser-action agents. See skills/wow/SKILL.md §1b.",
+    "tier1": "playwright-cli",
+    "tier2": "Claude-in-Chrome",
+    "tier3": "computer-use",
+    "tier4": "user_prompt (credentials and sign-in only)"
   },
   "wp_plugins_on_target_site": {
     "free_only": true,
