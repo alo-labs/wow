@@ -35,8 +35,9 @@ orchestrator direct intervention.
      - Enable or configure a caching plugin's advanced settings via WP Admin
      - Set a wp-config-equivalent option via a settings plugin UI
      - Apply a performance toggle that has no CLI equivalent
-   - Use 3-tier browser automation ladder (Claude-in-Chrome → computer-use →
+   - Use 4-tier browser automation ladder (Playwright CLI → Claude-in-Chrome → computer-use →
      user prompt for credentials only)
+   - Playwright CLI: use `npx playwright evaluate --browser=chromium <wp_admin_url> "<js>"` to apply settings via JS where possible before falling through to Claude-in-Chrome
    - Do NOT report a fix as failed simply because SSH is unavailable —
      attempt the browser path first
 
