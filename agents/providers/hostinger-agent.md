@@ -20,7 +20,9 @@ automation ladder for hPanel UI tasks.
 ### 1. Read context
 
 Read `/tmp/.wow/iterations/N/inventory.json`.
-Extract: `plan_tier` (shared|cloud|vps), `litespeed_present`, `object_cache_present`.
+Extract: `plan_tier` (shared|cloud|vps), `litespeed_present`, `object_cache_present`, `cdn_detected`.
+
+If `plan_tier` is absent (inventory-agent not yet updated), default to `shared`.
 
 ### 2. Always — invoke wordpress-manager
 
@@ -28,11 +30,11 @@ Use `morrealev/wordpress-manager` to:
 - Establish WP REST bridge to target site (use WP credentials from session context)
 - Run the performance optimization pass (caching, assets, DB cleanup)
 - Capture returned action list + per-action status
+- Note: wordpress-manager handles LiteSpeed Cache configuration if `litespeed_present == true`
 
 If wordpress-manager is not installed or unavailable:
 - Log: `{ "action": "wordpress-manager", "status": "skipped", "reason": "not_installed" }`
-- Fall back: notify orchestrator to use generic `provider-agent.md` instead
-- Stop; do not continue this agent
+- Write `{ "agent": "hostinger-agent", "status": "aborted", "reason": "wordpress-manager not installed" }` to `/tmp/.wow/iterations/N/hostinger-actions.json` and stop.
 
 ### 3. VPS tier only — invoke hostinger-agent-skills
 
@@ -49,6 +51,8 @@ If hostinger-agent-skills is not installed:
 - Log: `{ "action": "vps-ops", "status": "skipped", "reason": "hostinger-agent-skills_not_installed" }`
 - Continue without VPS block
 
+If the tool call raises an error or returns a failure, fall through to the next tier.
+
 ### 4. hPanel UI tasks — 3-tier automation ladder
 
 Run the following hPanel tasks. For each, attempt tiers in order until one succeeds.
@@ -56,7 +60,7 @@ Run the following hPanel tasks. For each, attempt tiers in order until one succe
 **Tasks:**
 - Enable Hostinger CDN (if `cdn_detected == false`)
   - hPanel path: Sites → [your site] → CDN → Enable
-- Enable Redis object cache (if `object_cache_present == false` and plan supports it)
+- Enable Redis object cache (if `object_cache_present == false` and (`plan_tier == "cloud"` or `plan_tier == "vps"`))
   - hPanel path: Hosting → Advanced → Redis → Enable
 - Set PHP version to latest stable (if `php_version` is < 8.2)
   - hPanel path: Hosting → PHP Configuration → PHP Version
@@ -69,11 +73,13 @@ Run the following hPanel tasks. For each, attempt tiers in order until one succe
 - Check: is `mcp__Claude_in_Chrome__navigate` callable?
 - If yes: navigate to hPanel URL, click through UI steps to complete the task
 - Log: `{ "method": "claude-in-chrome", "status": "done" }`
+- If the tool call raises an error or returns a failure, fall through to the next tier.
 
 **Tier 2 — computer-use:**
 - Check: is `mcp__computer-use__screenshot` callable?
 - If yes: take screenshot, locate hPanel UI, click to complete task
 - Log: `{ "method": "computer-use", "status": "done" }`
+- If the tool call raises an error or returns a failure, fall through to the next tier.
 
 **Tier 3 — user prompt:**
 - Emit structured request:
@@ -87,6 +93,8 @@ Run the following hPanel tasks. For each, attempt tiers in order until one succe
 
 ### 5. Write output
 
+Note: `N` is the current iteration number from session context (see `/tmp/.wow/iterations/` — use the current iteration directory).
+
 Write actions.json fragment to `/tmp/.wow/iterations/N/hostinger-actions.json`:
 
 ```json
@@ -99,6 +107,8 @@ Write actions.json fragment to `/tmp/.wow/iterations/N/hostinger-actions.json`:
       "domain": "provider",
       "status": "done|failed|skipped",
       "method": "wordpress-manager",
+      "hpanel_path": "",
+      "_note": "hpanel_path is empty string for non-UI actions",
       "notes": ""
     },
     {
