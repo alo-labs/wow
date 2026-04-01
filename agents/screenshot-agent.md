@@ -7,8 +7,21 @@ final REPORT. This agent captures screenshots only — no visual diff analysis.
 
 ## Steps
 
-1. Use the browser MCP tool (when available) to navigate to the site URL and
-   capture a full-page screenshot.
+1. Capture full-page screenshot using the browser automation ladder:
+
+   **Tier 1 — Claude-in-Chrome:**
+   - Check: is `mcp__Claude_in_Chrome__navigate` callable?
+   - If yes: navigate to `<site_url>`, wait for page load, capture full-page screenshot
+   - If tool call raises error or returns failure: fall through to Tier 2
+
+   **Tier 2 — computer-use:**
+   - Check: is `mcp__computer-use__screenshot` callable?
+   - If yes: take screenshot of the rendered page
+   - If tool call raises error or returns failure: fall through to Tier 3
+
+   **Tier 3 — skip gracefully:**
+   - Screenshot is non-blocking. Log: `{ "status": "skipped", "reason": "no_browser_tool_available" }`
+   - Continue without screenshot — do NOT ask the human
 
 2. Save screenshot to `/tmp/.wow/screenshots/iteration-N-<before|after>.png`.
 
@@ -22,8 +35,8 @@ final REPORT. This agent captures screenshots only — no visual diff analysis.
 }
 ```
 
-4. If the browser MCP is unavailable (PENDING status), return:
-```json
-{ "status": "skipped", "reason": "browser MCP not yet configured" }
-```
-   Do NOT fail — screenshot capture is non-blocking.
+4. After capturing, perform a basic visual health check:
+   - Confirm the page is rendering (not a blank page or fatal error screen)
+   - If error detected: log `{ "visual_health": "error_detected", "note": "<description>" }`
+   - If healthy: log `{ "visual_health": "ok" }`
+   Add `visual_health` field to the output JSON in Step 3.
