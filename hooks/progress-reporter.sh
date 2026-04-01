@@ -23,7 +23,7 @@ DELTA_FILE="/tmp/.wow/iterations/${ITERATION}/delta.json"
 DELTA=""
 if [ -f "$DELTA_FILE" ]; then
   DELTA_PCT=$(jq -r '.delta_pct // ""' "$DELTA_FILE")
-  [ -n "$DELTA_PCT" ] && DELTA=" | Δ: +${DELTA_PCT}%"
+  [ -n "$DELTA_PCT" ] && DELTA=" | Δ: ${DELTA_PCT}%"
 fi
 
 echo "⚡ WOW [iter $ITERATION | $PHASE]$SCORE$DELTA"

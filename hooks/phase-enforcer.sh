@@ -19,7 +19,7 @@ is_execution_tool() {
   case "$TOOL_NAME" in
     Bash)
       # Block WP-CLI write operations and SSH write commands
-      echo "$TOOL_INPUT" | grep -qE \
+      printf '%s\n' "$TOOL_INPUT" | grep -qE \
         "wp plugin (install|activate|deactivate|delete)|wp eval|wp db|ssh.*>|sftp|scp|tee |> .*\.(php|htaccess|conf)" \
         && return 0
       ;;

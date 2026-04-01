@@ -21,7 +21,7 @@ MAX_ITER=$(jq -r '.max_iterations // 10' "$SESSION_FILE")
 CONSECUTIVE=$(jq -r '.consecutive_below_threshold // 0' "$SESSION_FILE")
 
 # Check if below threshold
-BELOW=$(echo "$DELTA_PCT $THRESHOLD" | awk '{print ($1 < $2) ? "true" : "false"}')
+BELOW=$(echo "$DELTA_PCT $THRESHOLD" | LC_NUMERIC=C awk '{print ($1 < $2) ? "true" : "false"}')
 
 if [ "$BELOW" = "true" ]; then
   CONSECUTIVE=$((CONSECUTIVE + 1))
@@ -46,7 +46,8 @@ elif [ "$ITERATION" -ge "$MAX_ITER" ]; then
 fi
 
 # Update delta.json with stop signal
-jq ".stop = $STOP | .stop_reason = \"$STOP_REASON\" | .consecutive_below_threshold = $CONSECUTIVE" \
+jq --arg reason "$STOP_REASON" \
+  ".stop = $STOP | .stop_reason = \$reason | .consecutive_below_threshold = $CONSECUTIVE" \
   "$DELTA_FILE" > /tmp/.wow/delta.tmp && mv /tmp/.wow/delta.tmp "$DELTA_FILE"
 
 if [ "$STOP" = "true" ]; then
