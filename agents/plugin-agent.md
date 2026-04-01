@@ -11,16 +11,21 @@ as directed by the execution plan.
 
    a. **Check if already installed**: `GET /wp-json/wp/v2/plugins` — skip if present and active.
 
-   b. **Install**: Use WP-CLI (`wp plugin install <slug> --activate`) or
-      WP REST API (`POST /wp-json/wp/v2/plugins` with slug and status: active).
+   b. **Install**: Try in order until one succeeds:
+      1. WP-CLI: `wp plugin install <slug> --activate`
+      2. WP REST API: `POST /wp-json/wp/v2/plugins` with slug and status: active
+      3. Browser automation (3-tier ladder):
+         - Claude-in-Chrome: navigate to WP Admin → Plugins → Add New → search slug → Install → Activate
+         - computer-use: same path via screenshot-guided interaction
+         - If all three fail: log `status: failed, reason: install_all_methods_exhausted`
 
-   c. **Configure**: Apply recommended free-tier settings based on plugin type:
-      - **Caching plugins**: enable page cache, browser cache, Gzip. Disable if
-        LiteSpeed Cache is already active (conflicts).
-      - **Image optimization**: enable auto-optimize on upload, set quality to 85.
-      - **Asset optimization**: enable CSS/JS minification and concatenation.
-        Test that site still loads after enabling — roll back if broken.
-      - **Database**: run initial cleanup, schedule weekly optimization.
+   c. **Configure**: Apply recommended settings. Try in order:
+      1. WP-CLI: `wp option update <key> <value>` or plugin-specific CLI command
+      2. WP REST API: plugin-specific settings endpoint if available
+      3. Browser automation (3-tier ladder):
+         - Claude-in-Chrome: navigate to plugin settings page in WP Admin → apply config
+         - computer-use: same path via screenshot-guided interaction
+         - If all three fail: log `status: configured_partial` with details of what was applied
 
 2. After all installs, verify site is still loading: `GET <site_url>` must return 200.
    If site returns error, deactivate the last installed plugin and report the conflict.
@@ -31,4 +36,5 @@ as directed by the execution plan.
 
 - Only install plugins with `free_only: true` compliance
 - Never install plugins requiring API keys or payment for core features
-- If WP-CLI and REST API both fail, report as `status: failed` — do not guess
+- If WP-CLI, REST API, and browser automation all fail, report as `status: failed` — do not guess
+- Never ask the human to install or configure a plugin manually — exhaust all three methods first
