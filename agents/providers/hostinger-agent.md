@@ -3,17 +3,18 @@
 ## Role
 
 Apply Hostinger-specific hosting-level optimizations when `hosting_provider == "hostinger"`
-in inventory.json. Uses two community plugins as primary tools and a 3-tier browser
+in inventory.json. Uses two community plugins as primary tools and a 4-tier browser
 automation ladder for hPanel UI tasks.
 
 **Primary tools:**
 - `morrealev/wordpress-manager` — Hostinger MCP + WP REST bridge + performance agents
 - `hostinger/hostinger-agent-skills` — VPS management, SSH keys, snapshots, metrics (VPS tier only)
 
-**Browser automation ladder (for hPanel UI tasks):**
-- Tier 1: Claude-in-Chrome MCP (`mcp__Claude_in_Chrome__*`)
-- Tier 2: computer-use MCP (`mcp__computer-use__*`)
-- Tier 3: structured user prompt with exact hPanel path
+**Browser automation ladder (for hPanel UI tasks — 4 tiers):**
+- Tier 1: Playwright CLI (`npx playwright screenshot/evaluate`)
+- Tier 2: Claude-in-Chrome MCP (`mcp__Claude_in_Chrome__*`)
+- Tier 3: computer-use MCP (`mcp__computer-use__*`)
+- Tier 4: structured user prompt with exact hPanel path
 
 ## Steps
 
@@ -53,7 +54,7 @@ If hostinger-agent-skills is not installed:
 
 If a tool call raises an error or returns a failure, log the error and continue to Step 4.
 
-### 4. hPanel UI tasks — 3-tier automation ladder
+### 4. hPanel UI tasks — 4-tier automation ladder
 
 Run the following hPanel tasks. For each, attempt tiers in order until one succeeds.
 
@@ -69,19 +70,26 @@ Run the following hPanel tasks. For each, attempt tiers in order until one succe
 
 **For each task:**
 
-**Tier 1 — Claude-in-Chrome:**
+**Tier 1 — Playwright CLI:**
+- Check availability: `npx playwright --version >/dev/null 2>&1`
+- If available: `npx playwright screenshot --browser=chromium <hpanel_url> /tmp/.wow/hpanel-check.png`
+  to verify hPanel loads; if the page requires login or bot detection blocks headless: fall through to Tier 2
+- Log: `{ "method": "playwright-cli", "status": "done|fallthrough" }`
+- If command exits non-zero or Playwright not found: fall through to Tier 2
+
+**Tier 2 — Claude-in-Chrome:**
 - Check: is `mcp__Claude_in_Chrome__navigate` callable?
 - If yes: navigate to hPanel URL, click through UI steps to complete the task
 - Log: `{ "method": "claude-in-chrome", "status": "done" }`
-- If the tool call raises an error or returns a failure, fall through to the next tier.
+- If the tool call raises an error or returns a failure, fall through to Tier 3.
 
-**Tier 2 — computer-use:**
+**Tier 3 — computer-use:**
 - Check: is `mcp__computer-use__screenshot` callable?
 - If yes: take screenshot, locate hPanel UI, click to complete task
 - Log: `{ "method": "computer-use", "status": "done" }`
-- If the tool call raises an error or returns a failure, fall through to the next tier.
+- If the tool call raises an error or returns a failure, fall through to Tier 4.
 
-**Tier 3 — user prompt:**
+**Tier 4 — user prompt:**
 - Emit structured request:
   ```
   ACTION REQUIRED: [task name]
