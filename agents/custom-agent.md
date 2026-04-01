@@ -28,6 +28,18 @@ orchestrator direct intervention.
    - Examples: disable unused REST API endpoints, remove query strings from assets,
      defer non-critical scripts
 
+   **When SSH is unavailable — browser automation path:**
+   - If SSH access is not available but a fix can be achieved via WP Admin:
+     use browser automation to apply it
+   - Examples:
+     - Enable or configure a caching plugin's advanced settings via WP Admin
+     - Set a wp-config-equivalent option via a settings plugin UI
+     - Apply a performance toggle that has no CLI equivalent
+   - Use 3-tier browser automation ladder (Claude-in-Chrome → computer-use →
+     user prompt for credentials only)
+   - Do NOT report a fix as failed simply because SSH is unavailable —
+     attempt the browser path first
+
 2. After each file modification, verify site loads: `GET <site_url>` must return 200.
    If error, restore backup immediately and report `status: failed`.
 
@@ -39,3 +51,5 @@ orchestrator direct intervention.
 - Never modify core WordPress files
 - Never modify theme files directly — use mu-plugins instead
 - Test after every modification; roll back on any error
+- When using browser automation to modify site settings, note the original
+  value in the action log before changing it (enables manual rollback if needed)
