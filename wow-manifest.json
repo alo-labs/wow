@@ -12,6 +12,19 @@
     "browser": "PENDING — free Playwright/Puppeteer MCP to be evaluated",
     "wp-cli": "PENDING — free WP-CLI MCP to be evaluated"
   },
+  "provider_skills": {
+    "_note": "Provider-specific skills keyed by hosting_provider value from inventory.json",
+    "hostinger": [
+      "hostinger/hostinger-agent-skills",
+      "morrealev/wordpress-manager"
+    ]
+  },
+  "browser_automation": {
+    "_note": "3-tier ladder for tasks requiring UI interaction (e.g. hPanel). Primary → fallback → last_resort.",
+    "primary": "Claude-in-Chrome",
+    "fallback": "computer-use",
+    "last_resort": "user_prompt"
+  },
   "wp_plugins_on_target_site": {
     "free_only": true,
     "_excluded": "ShortPixel and Smush excluded — credit-gated bulk optimization",
