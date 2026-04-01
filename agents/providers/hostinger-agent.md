@@ -51,7 +51,7 @@ If hostinger-agent-skills is not installed:
 - Log: `{ "action": "vps-ops", "status": "skipped", "reason": "hostinger-agent-skills_not_installed" }`
 - Continue without VPS block
 
-If the tool call raises an error or returns a failure, fall through to the next tier.
+If a tool call raises an error or returns a failure, log the error and continue to Step 4.
 
 ### 4. hPanel UI tasks — 3-tier automation ladder
 
@@ -123,4 +123,4 @@ Write actions.json fragment to `/tmp/.wow/iterations/N/hostinger-actions.json`:
 }
 ```
 
-Status values: `"done"` | `"failed"` | `"skipped"` | `"user_action_required"`
+Status values: `"done"` | `"failed"` | `"skipped"` | `"user_action_required"` | `"aborted"`
