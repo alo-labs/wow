@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # install.sh — WOW plugin dependency installer
-# Run automatically by Claude Code when /plugin install alolabs/wow is executed.
+# Run automatically by Claude Code when /plugin install alo-labs/wow is executed.
 set -e
 
 echo "⚡ WOW installer — installing community skill and MCP dependencies..."

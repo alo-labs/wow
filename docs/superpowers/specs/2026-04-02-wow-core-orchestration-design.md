@@ -3,7 +3,7 @@
 **Plugin**: WOW (WordPress → Optimized WordPress)
 **Author**: Shafqat Ullah <shafqat@sourcevo.com>
 **Organization**: Ālo Labs (https://alolabs.dev)
-**Repo**: alolabs/wow
+**Repo**: alo-labs/wow
 **Date**: 2026-04-02
 **Sub-project**: 1 of N — Core Agent & Orchestration
 
@@ -21,7 +21,7 @@ The agent stops only when further iterations yield diminishing returns, not when
 checklist runs out.
 
 **Entry point**: `/wow`
-**Install**: `/plugin install alolabs/wow`
+**Install**: `/plugin install alo-labs/wow`
 
 ---
 
@@ -248,7 +248,7 @@ All resources must be free or freemium with core optimization features available
 without payment. Paid-only tools are never installed or recommended.
 
 **Manifest updates**: The manifest is static in sub-project 1. To get an updated
-manifest with new community resources, re-run `/plugin install alolabs/wow`. A
+manifest with new community resources, re-run `/plugin install alo-labs/wow`. A
 community-maintained auto-update registry is planned for sub-project 5.
 
 ---
@@ -278,7 +278,7 @@ State persists across loop iterations and survives interruptions. Credentials ar
 ## Installation
 
 ```bash
-/plugin install alolabs/wow
+/plugin install alo-labs/wow
 ```
 
 The install hook:

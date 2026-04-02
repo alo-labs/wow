@@ -3,7 +3,7 @@
 **Plugin**: WOW (WordPress → Optimized WordPress)
 **Author**: Shafqat Ullah <shafqat@sourcevo.com>
 **Organization**: Ālo Labs (https://alolabs.dev)
-**Repo**: alolabs/wow
+**Repo**: alo-labs/wow
 **Date**: 2026-04-02
 **Sub-project**: 4 of N — Report Skill
 

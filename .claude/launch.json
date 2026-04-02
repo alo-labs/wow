@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "wow-site",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),path=require('path');const SITE=path.resolve('/Users/shafqat/Documents/Projects/CodersTrust/wordpress-optimization/site');http.createServer((req,res)=>{const f=path.join(SITE,req.url==='/'?'index.html':req.url);fs.readFile(f,(e,d)=>{if(e){res.writeHead(404);res.end();}else{const ext=path.extname(f);const ct=ext==='.html'?'text/html':ext==='.css'?'text/css':ext==='.js'?'text/javascript':'application/octet-stream';res.writeHead(200,{'Content-Type':ct});res.end(d);}});}).listen(3456,()=>console.log('Serving on http://localhost:3456'));"],
+      "port": 3456
+    },
+    {
       "name": "brainstorm",
       "runtimeExecutable": "/opt/homebrew/bin/node",
       "runtimeArgs": ["/Users/shafqat/.claude/plugins/cache/superpowers-marketplace/superpowers/5.0.5/skills/brainstorming/scripts/server.cjs", "--port", "50232", "--screen-dir", "/Users/shafqat/Documents/Projects/CodersTrust/wordpress-optimization/.superpowers/brainstorm/59702-1775073608"],

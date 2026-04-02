@@ -12,7 +12,7 @@ WOW orchestrates community skills, MCP tools, and specialist subagents through a
 
 ```bash
 # Install the plugin
-/plugin install alolabs/wow
+/plugin install alo-labs/wow
 
 # Run it
 /wow
