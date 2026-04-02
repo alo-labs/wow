@@ -86,6 +86,10 @@ deactivate it:
 wp plugin deactivate <slug>
 ```
 
+If a plugin slug exists in the current state but does NOT appear in the T+1 snapshot at all
+(i.e., WOW installed it after iteration T+1): deactivate it. A plugin absent from the snapshot
+was not present before the rollback range began.
+
 Do NOT delete any plugin. Do NOT touch plugins that were already `active` before
 the rollback range began.
 

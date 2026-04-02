@@ -50,6 +50,11 @@ If BackWPup installation or backup fails: log `plugin_backup.status: "failed"` a
 
 **If SSH available:**
 
+Create backup directory with restricted permissions:
+```bash
+mkdir -p /tmp/.wow/backups && chmod 700 /tmp/.wow/backups
+```
+
 Check uploads directory size:
 ```bash
 du -sh <wp_root>/wp-content/uploads/
@@ -57,16 +62,26 @@ du -sh <wp_root>/wp-content/uploads/
 
 Export database:
 ```bash
-wp db export /tmp/.wow-db-backup-N.sql
+wp db export /tmp/.wow/backups/db-backup-N.sql
+chmod 600 /tmp/.wow/backups/db-backup-N.sql
 ```
+
+Check total size of wp_root (excluding uploads):
+```bash
+WP_SIZE=$(du -sb <wp_root> --exclude=wp-content/uploads 2>/dev/null | cut -f1)
+```
+If WP_SIZE exceeds 2 GB (2147483648 bytes): skip the file archive with `ssh_backup.status: "skipped"` and `reason: "wp_root_exceeds_2gb"`. Log a warning and continue — the database export and BackWPup plugin backup provide sufficient coverage.
 
 Archive WordPress files:
 ```bash
 # If uploads <= 500MB: include uploads
-tar -czf /tmp/.wow-files-backup-N.tar.gz <wp_root>
+timeout 300 tar -czf /tmp/.wow/backups/files-backup-N.tar.gz <wp_root>
 
 # If uploads > 500MB: exclude uploads
-tar -czf /tmp/.wow-files-backup-N.tar.gz --exclude=<wp_root>/wp-content/uploads <wp_root>
+timeout 300 tar -czf /tmp/.wow/backups/files-backup-N.tar.gz --exclude=<wp_root>/wp-content/uploads <wp_root>
+```
+```bash
+chmod 600 /tmp/.wow/backups/files-backup-N.tar.gz
 ```
 
 Record both paths and `uploads_excluded` flag in `backup.json`.
@@ -95,8 +110,8 @@ Write to `/tmp/.wow/iterations/N/backup.json`:
     "status": "done|failed|skipped"
   },
   "ssh_backup": {
-    "db_path": "/tmp/.wow-db-backup-1.sql",
-    "files_path": "/tmp/.wow-files-backup-1.tar.gz",
+    "db_path": "/tmp/.wow/backups/db-backup-1.sql",
+    "files_path": "/tmp/.wow/backups/files-backup-1.tar.gz",
     "uploads_excluded": false,
     "status": "done|failed|skipped"
   },

@@ -94,9 +94,9 @@ through N, in reverse order — i.e., start with snapshot N, end with snapshot T
 For each snapshot in reverse order, for each file in `snapshot.files`:
 - If snapshot value is a string: write that content back to the file path via SSH
   ```bash
-  cat > <path> << 'WOWEOF'
+  cat > <path> << 'WOW_RESTORE_EOF_a7f3e91b'
   <snapshot content>
-  WOWEOF
+  WOW_RESTORE_EOF_a7f3e91b
   ```
 - If snapshot value is `null`: delete the file (WOW created it from scratch)
   ```bash

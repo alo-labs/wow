@@ -104,6 +104,10 @@ For each snapshot in reverse order, for each key in `snapshot.server`:
 - If the value is `null`: skip with warning `"skipped — no snapshot value"`
 - If the value is non-null: restore via SSH or hosting panel
 
+**Batch PHP-FPM changes:** When multiple php.ini keys need restoring (e.g., opcache_enabled,
+opcache_memory_consumption, php_fpm_pm), apply ALL php.ini edits first, then restart PHP-FPM
+once at the end. Do not restart after each individual key change.
+
 Restore commands by key:
 - `opcache_enabled: false` → set `opcache.enable=0` in php.ini and restart PHP-FPM:
   `sudo systemctl restart php-fpm`

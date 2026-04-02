@@ -60,7 +60,7 @@ diff_pct = changed_pixels / total_pixels * 100
 
 If `diff_pct <= 5%`: write clean result and exit:
 ```json
-{ "iteration": N, "status": "clean", "diff_pct": 3.2, "diff_image_path": "/tmp/.wow/iterations/N/diff.png", "pixel_diff": "done", "severity": "none" }
+{ "iteration": N, "status": "clean", "diff_pct": 3.2, "pixel_diff": "done", "severity": "none" }
 ```
 
 ### 4. Claude visual judgment (diff_pct > 5% or pixel_diff skipped)

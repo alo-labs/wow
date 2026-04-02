@@ -55,6 +55,10 @@ is assigned to exactly one execution domain to prevent runtime conflicts.
    - `content`: actions fixing in-content markup (lazy loading, image dimensions, srcset) —
      implemented via WordPress filters in mu-plugin
 
+   Note: `theme` and `content` domain actions are executed by `custom-agent` via
+   mu-plugin overrides at execution time (see `wow-execute/SKILL.md`). They do not
+   have their own execution agents.
+
    Example theme domain actions:
    - Add `font-display: swap` via mu-plugin: `add_action('wp_head', function(){ echo '<style>@font-face{font-display:swap}</style>'; });`
    - Defer non-critical theme stylesheets via `wp_enqueue_scripts` filter
