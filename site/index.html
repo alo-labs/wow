@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOW! &mdash; WordPress &rarr; Optimized WordPress</title>
+<meta name="description" content="WOW is an autonomous Claude Code plugin that optimizes any WordPress site to world-class performance. Iterative auditing, planning, and execution with full backup and rollback safety.">
+<meta property="og:title" content="WOW &mdash; WordPress &rarr; Optimized WordPress">
+<meta property="og:description" content="The autonomous WordPress performance orchestrator. 11 specialist agents. 5 optimization domains. Full backup and rollback. Visual regression detection. One command: /wow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wow.alolabs.dev">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WOW &mdash; WordPress &rarr; Optimized WordPress">
+<meta name="twitter:description" content="The autonomous WordPress performance orchestrator. 11 specialist agents. Full backup and rollback. One command: /wow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───── RESET ───── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+
+/* ───── DESIGN TOKENS — LIGHT (default) ───── */
+:root{
+  --bg-page:#f8f9fc;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f1f5f9;
+  --bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f0fdf4 50%,#fdf2f8 100%);
+  --accent:#059669;
+  --accent-light:#10b981;
+  --accent-glow:rgba(16,185,129,.1);
+  --accent2:#0891b2;
+  --accent3:#7c3aed;
+  --green:#059669;
+  --amber:#d97706;
+  --red:#dc2626;
+  --cyan:#0891b2;
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --text-dim:#94a3b8;
+  --border:#e2e8f0;
+  --border-hover:#cbd5e1;
+  --radius:12px;
+  --radius-lg:20px;
+  --radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.08);
+  --shadow-glow:0 0 40px rgba(16,185,129,.06);
+  --nav-bg:rgba(248,249,252,.9);
+  --nav-mobile-bg:rgba(248,249,252,.98);
+  --section-alt:rgba(241,245,249,.6);
+  --table-row-hover:rgba(16,185,129,.03);
+}
+
+/* ───── DARK THEME ───── */
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;
+  --bg-card:#12121a;
+  --bg-card-hover:#181825;
+  --bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0a1a0f 40%,#0f1a2e 100%);
+  --accent:#34d399;
+  --accent-light:#6ee7b7;
+  --accent-glow:rgba(52,211,153,.15);
+  --accent2:#22d3ee;
+  --accent3:#a78bfa;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --red:#f87171;
+  --cyan:#22d3ee;
+  --text-primary:#e2e8f0;
+  --text-secondary:#94a3b8;
+  --text-dim:#64748b;
+  --border:#1e293b;
+  --border-hover:#334155;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
+  --shadow-glow:0 0 40px rgba(52,211,153,.08);
+  --nav-bg:rgba(10,10,15,.85);
+  --nav-mobile-bg:rgba(10,10,15,.97);
+  --section-alt:rgba(18,18,26,.4);
+  --table-row-hover:rgba(52,211,153,.03);
+}
+
+/* ───── THEME TRANSITION ───── */
+body,nav,section,.feature-card,.layer-card,.domain-card,.enforcement-block,.install-block,.code-block,.callout,.agent-card{
+  transition:background .25s,background-color .25s,border-color .25s,color .25s,box-shadow .25s;
+}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--bg-page);
+  color:var(--text-primary);
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ───── UTILITIES ───── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1100px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+.text-center{text-align:center}
+.mt-2{margin-top:16px}.mt-3{margin-top:24px}.mt-4{margin-top:32px}.mt-6{margin-top:48px}.mt-8{margin-top:64px}
+.mb-2{margin-bottom:16px}.mb-4{margin-bottom:32px}
+.tag{display:inline-block;padding:7px 16px;border-radius:999px;font-size:.75rem;font-weight:600;letter-spacing:.03em}
+.tag-green{background:rgba(52,211,153,.12);color:var(--green)}
+.tag-cyan{background:rgba(34,211,238,.12);color:var(--cyan)}
+.tag-purple{background:rgba(167,139,250,.12);color:var(--accent3)}
+.tag-amber{background:rgba(251,191,36,.12);color:var(--amber)}
+.tag-red{background:rgba(248,113,113,.12);color:var(--red)}
+
+/* ───── NAV ───── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+}
+nav .nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+nav .logo{
+  font-weight:800;font-size:1.1rem;
+  background:linear-gradient(135deg,var(--accent-light),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.02em;
+}
+nav .nav-links{display:flex;gap:28px;list-style:none}
+nav .nav-links a{
+  color:var(--text-secondary);text-decoration:none;font-size:.875rem;
+  font-weight:500;transition:color .2s;
+}
+nav .nav-links a:hover{color:var(--text-primary)}
+nav .nav-cta{
+  background:var(--accent);color:#fff;padding:8px 20px;border-radius:999px;
+  font-size:.8rem;font-weight:600;text-decoration:none;
+  transition:all .2s;border:none;cursor:pointer;
+}
+nav .nav-cta:hover{background:var(--accent-light);box-shadow:0 0 20px rgba(16,185,129,.3)}
+.nav-toggle{display:none;background:none;border:none;color:var(--text-primary);font-size:1.5rem;cursor:pointer}
+@media(max-width:768px){
+  nav .nav-links{display:none}
+  .nav-toggle{display:block}
+  nav .nav-links.active{
+    display:flex;flex-direction:column;position:absolute;
+    top:64px;left:0;right:0;background:var(--nav-mobile-bg);
+    padding:20px 24px;gap:16px;border-bottom:1px solid var(--border);
+  }
+}
+
+/* ───── HERO ───── */
+.hero{
+  background:var(--bg-hero);
+  padding:140px 24px 100px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(16,185,129,.08) 0%,transparent 70%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:-150px;left:-100px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(8,145,178,.06) 0%,transparent 70%);
+}
+.hero .container{position:relative;z-index:1}
+.hero .version-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);
+  border-radius:999px;padding:6px 16px;font-size:.8rem;
+  color:var(--accent-light);font-weight:500;margin-bottom:40px;
+}
+.hero .version-badge .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{
+  font-size:clamp(2.2rem,5vw,4rem);font-weight:900;
+  line-height:1.05;letter-spacing:-.04em;
+  max-width:800px;margin:0 auto 24px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--accent-light) 0%,var(--accent2) 50%,var(--accent3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero .tagline{
+  font-size:1.25rem;font-weight:700;color:var(--text-primary);
+  margin:0 auto 20px;letter-spacing:-.01em;
+}
+.hero .subtitle{
+  font-size:1.1rem;color:var(--text-secondary);max-width:620px;
+  margin:0 auto 40px;line-height:1.7;
+}
+.hero .cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:999px;
+  background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);
+  font-size:.8rem;font-weight:700;color:var(--accent-light);
+  letter-spacing:.02em;font-family:var(--font-mono);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:999px;font-size:.9rem;
+  font-weight:600;text-decoration:none;transition:all .25s;
+  border:none;cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;box-shadow:0 4px 20px rgba(16,185,129,.3);
+}
+.btn-primary:hover{
+  box-shadow:0 8px 30px rgba(16,185,129,.4);transform:translateY(-2px);
+}
+.btn-outline{
+  background:transparent;color:var(--text-primary);
+  border:1px solid var(--border-hover);
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent-light)}
+
+/* ───── SECTION HEADINGS ───── */
+section{padding:80px 0}
+section:nth-child(even){background:var(--section-alt)}
+.section-label{
+  text-transform:uppercase;font-size:.75rem;font-weight:700;
+  letter-spacing:.12em;color:var(--accent-light);margin-bottom:12px;
+}
+.section-title{
+  font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;
+  letter-spacing:-.03em;margin-bottom:16px;line-height:1.2;
+}
+.section-desc{
+  font-size:1rem;color:var(--text-secondary);max-width:600px;
+  margin-bottom:48px;
+}
+.section-desc.centered{margin-left:auto;margin-right:auto}
+
+/* ───── FEATURE CARDS ───── */
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media(max-width:900px){.feature-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.feature-grid{grid-template-columns:1fr}}
+.feature-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:32px;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.feature-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-4px);
+}
+.feature-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.feature-card:hover::before{opacity:1}
+.feature-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:16px;
+}
+.feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.feature-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.6}
+
+/* ───── DOMAIN CARDS ───── */
+.domain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+@media(max-width:900px){.domain-grid{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1200px){.domain-grid{grid-template-columns:repeat(3,1fr)}}
+.domain-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:28px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.domain-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-4px);
+}
+.domain-card .domain-icon{font-size:1.8rem;margin-bottom:12px}
+.domain-card .domain-name{font-size:1rem;font-weight:800;margin-bottom:4px;letter-spacing:-.02em}
+.domain-card .domain-role{
+  font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--accent-light);margin-bottom:14px;
+}
+.domain-card .domain-desc{
+  font-size:.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;flex:1;
+}
+.domain-card .domain-items{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:6px;
+}
+.domain-card .domain-items li{
+  font-size:.8rem;color:var(--text-secondary);
+  display:flex;align-items:flex-start;gap:8px;line-height:1.4;
+}
+.domain-card .domain-items li::before{
+  content:'\2192';color:var(--accent-light);font-weight:700;flex-shrink:0;margin-top:1px;
+}
+
+/* ───── AGENT GRID ───── */
+.agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.agent-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.agent-grid{grid-template-columns:1fr}}
+.agent-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:24px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.agent-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-3px);
+}
+.agent-card .agent-icon{font-size:1.6rem;margin-bottom:10px}
+.agent-card .agent-name{font-size:.95rem;font-weight:800;margin-bottom:4px;letter-spacing:-.02em}
+.agent-card .agent-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.5;flex:1}
+
+/* ───── LAYER CARDS ───── */
+.layer-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:28px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;align-items:flex-start;gap:16px;
+}
+.layer-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-3px);
+}
+.layer-num{
+  min-width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-weight:700;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);margin-top:2px;
+}
+.layer-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.layer-card p{font-size:.875rem;color:var(--text-secondary);line-height:1.6}
+
+/* ───── ENFORCEMENT BLOCKS ───── */
+.enforcement-block{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.enforcement-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+}
+.enforcement-header .block-title{
+  font-size:.75rem;font-weight:700;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:.08em;
+  font-family:var(--font-mono);
+}
+.enforcement-header .block-dots{display:flex;gap:6px}
+.enforcement-header .block-dots span{width:10px;height:10px;border-radius:50%}
+.enforcement-body{
+  padding:20px 24px;
+  font-family:var(--font-mono);font-size:.82rem;
+  line-height:1.9;color:var(--text-secondary);
+  overflow-x:auto;
+}
+.enforcement-body .stop{color:var(--red);font-weight:700}
+.enforcement-body .ok{color:var(--green);font-weight:700}
+.enforcement-body .warn{color:var(--amber);font-weight:700}
+.enforcement-body .dim{color:var(--text-dim)}
+.enforcement-body .accent{color:var(--accent-light)}
+
+/* ───── WORKFLOW TABLE ───── */
+.workflow-table{width:100%;border-collapse:collapse;margin-top:8px}
+.workflow-table th{
+  text-align:left;padding:10px 16px;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-dim);border-bottom:2px solid var(--border);
+}
+.workflow-table td{
+  padding:10px 16px;font-size:.82rem;
+  border-bottom:1px solid var(--border);
+  color:var(--text-secondary);
+  vertical-align:middle;
+}
+.workflow-table td:first-child{color:var(--text-primary);font-weight:600}
+.workflow-table tr:hover td{background:var(--table-row-hover)}
+.phase-badge{
+  display:inline-block;padding:2px 10px;border-radius:999px;
+  font-size:.7rem;font-weight:700;letter-spacing:.05em;
+}
+.phase-intake{background:rgba(100,116,139,.12);color:#64748b}
+.phase-audit{background:rgba(8,145,178,.12);color:var(--cyan)}
+.phase-plan{background:rgba(167,139,250,.15);color:var(--accent3)}
+.phase-execute{background:rgba(52,211,153,.12);color:var(--green)}
+.phase-verify{background:rgba(251,191,36,.12);color:var(--amber)}
+.phase-report{background:rgba(244,114,182,.12);color:#db2777}
+
+/* ───── INSTALL ───── */
+.install-block{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  max-width:520px;margin:0 auto;
+}
+.install-code{
+  padding:28px 32px;font-family:var(--font-mono);font-size:.85rem;
+  line-height:2.2;color:var(--text-secondary);
+}
+.install-code .comment{color:var(--text-dim)}
+.install-code .cmd{color:var(--green)}
+.install-code .flag{color:var(--accent2)}
+
+/* ───── CALLOUT ───── */
+.callout{
+  background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(8,145,178,.05));
+  border:1px solid rgba(16,185,129,.2);
+  border-radius:var(--radius-lg);padding:40px;
+  text-align:center;max-width:700px;margin:0 auto;
+}
+.callout .callout-icon{font-size:2rem;margin-bottom:12px}
+.callout p{font-size:1.05rem;color:var(--text-secondary);line-height:1.7}
+.callout strong{color:var(--text-primary)}
+
+/* ───── CTA SECTION ───── */
+.cta-section{
+  background:linear-gradient(135deg,rgba(5,150,105,.12) 0%,rgba(8,145,178,.08) 50%,rgba(124,58,237,.06) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+
+/* ───── FOOTER ───── */
+footer{
+  border-top:1px solid var(--border);padding:48px 0;
+  color:var(--text-dim);font-size:.85rem;
+}
+footer .footer-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+footer .footer-links{display:flex;gap:24px}
+
+/* ───── LOGO BADGE ───── */
+.logo-wrapper{position:relative;display:inline-block}
+.alpha-badge{
+  display:inline-block;
+  background:rgba(16,185,129,.1);
+  border:1px solid rgba(16,185,129,.28);
+  color:var(--accent-light);
+  font-size:.55rem;font-weight:700;letter-spacing:.08em;
+  padding:3px 7px;border-radius:6px;
+  font-family:var(--font-sans);font-style:normal;line-height:1;
+  position:absolute;top:0;left:100%;margin-left:1px;transform:translateY(-55%);
+}
+
+/* ───── ANIMATIONS ───── */
+.fade-in{opacity:0;transform:translateY(20px);transition:all .6s ease-out}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ───── RESPONSIVE ───── */
+@media(max-width:768px){
+  section{padding:72px 0}
+  .hero{padding:110px 20px 72px}
+  .hero h1{margin-bottom:20px}
+  .hero .tagline{font-size:1.1rem}
+  .hero .subtitle{font-size:.95rem;margin-bottom:36px}
+  .hero .subtitle br{display:none}
+  .callout{padding:28px 20px}
+  .install-code{font-size:.78rem;padding:20px 16px}
+  .enforcement-body{font-size:.78rem;padding:16px 18px}
+  .layer-card{padding:20px}
+  .feature-card{padding:24px}
+}
+@media(max-width:600px){
+  section{padding:60px 0}
+  .hero{padding:96px 16px 64px}
+  .hero .cta-group{flex-direction:column;align-items:center;gap:20px}
+  .btn{width:100%;max-width:300px;justify-content:center}
+  .install-block{max-width:100%}
+  .install-code{padding:16px;font-size:.73rem}
+  .workflow-table td,.workflow-table th{padding:7px 8px;font-size:.75rem}
+  footer .footer-inner{flex-direction:column;align-items:flex-start;gap:12px}
+  footer .footer-links{flex-wrap:wrap;gap:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ────── NAV ────── -->
+<nav>
+  <div class="nav-inner">
+    <span class="logo">WOW</span>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#loop">How It Works</a></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#agents">Agents</a></li>
+      <li><a href="#safety">Safety</a></li>
+      <li><a href="#install">Install</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="theme-toggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()" style="
+        width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+        background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;
+        display:flex;align-items:center;justify-content:center;cursor:pointer;
+        transition:all .2s;flex-shrink:0;
+      " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
+        <span id="theme-icon">&#9728;&#65039;</span>
+      </button>
+      <a href="https://github.com/alo-labs/wow" class="nav-cta" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ────── HERO ────── -->
+<section class="hero text-center">
+  <div class="container">
+    <div class="version-badge"><span class="dot"></span> Autonomous WordPress Performance Orchestrator</div>
+    <h1><span class="logo-wrapper"><span class="gradient">WOW!</span><span class="alpha-badge">ALPHA</span></span></h1>
+    <p class="tagline">WordPress &rarr; Optimized WordPress</p>
+    <p class="subtitle">One command. 11 specialist agents. World-class Lighthouse scores.<br>Full backup and rollback. Zero manual intervention.</p>
+
+    <div class="cta-group">
+      <a href="#install" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/alo-labs/wow" class="btn btn-outline" target="_blank">GitHub &rarr;</a>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <span class="hero-pill">11 Specialist Agents</span>
+      <span class="hero-pill">5 Optimization Domains</span>
+      <span class="hero-pill">Full Backup &amp; Rollback</span>
+      <span class="hero-pill">Visual Regression Guard</span>
+    </div>
+  </div>
+</section>
+
+<!-- ────── PROBLEM ────── -->
+<section id="problem">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">WordPress Performance Is a Full-Time Job</h2>
+      <p class="section-desc centered">Every WordPress site has the same problems. Fixing them requires expertise across plugins, server config, theme optimization, and content delivery &mdash; usually spread across a dozen tools and consultants.</p>
+    </div>
+    <div class="feature-grid mt-6">
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(248,113,113,.12);color:var(--red)">&#128528;</div>
+        <h3>Slow Lighthouse Scores</h3>
+        <p>Most WordPress sites score 30&ndash;60 on Lighthouse. Themes load render-blocking CSS, plugins inject unoptimized JS, and nobody configured server caching.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)">&#128268;</div>
+        <h3>Plugin Sprawl</h3>
+        <p>50+ plugins, half unused, none configured. Each one adds HTTP requests, database queries, and CSS/JS that slows every page load.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent3)">&#128295;</div>
+        <h3>Server Blindness</h3>
+        <p>OPcache disabled. PHP-FPM on default settings. No gzip. No browser caching headers. The server is doing ten times more work than it needs to.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(8,145,178,.12);color:var(--cyan)">&#128247;</div>
+        <h3>Fear of Breaking Things</h3>
+        <p>Every optimization risks breaking the site. No backups before changes. No way to detect visual regressions. No rollback when things go wrong.</p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#128161;</div>
+        <p><strong>The root cause:</strong> WordPress performance optimization requires coordinated changes across plugins, server config, theme assets, and content markup. No single tool covers all of it &mdash; and no human wants to do it manually every time. WOW does.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── THE LOOP ────── -->
+<section id="loop">
+  <div class="container text-center">
+    <div class="section-label">The Orchestrator</div>
+    <h2 class="section-title">Audit. Plan. Execute. Verify. Repeat.</h2>
+    <p class="section-desc centered">WOW runs an autonomous optimization loop. Each iteration audits the site, plans ranked actions, backs up everything, executes changes across 5 domains in parallel, checks for visual regressions, and verifies improvement. It stops when returns diminish.</p>
+
+    <div style="overflow-x:auto" class="mt-6 fade-in">
+      <table class="workflow-table">
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>What Happens</th>
+            <th>Agents Involved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="phase-badge phase-intake">INTAKE</span></td><td>Collect site URL, WordPress credentials, SSH access, autonomy mode</td><td>Orchestrator</td></tr>
+          <tr><td><span class="phase-badge phase-audit">AUDIT</span></td><td>Lighthouse scores, Core Web Vitals, plugin inventory, theme analysis, screenshots</td><td>lighthouse, inventory, screenshot, theme-analysis</td></tr>
+          <tr><td><span class="phase-badge phase-plan">PLAN</span></td><td>Gap analysis, community resource mapping, conflict-free action ranking across 5 domains</td><td>plan-agent</td></tr>
+          <tr><td style="font-weight:700;color:var(--accent-light)">BACKUP</td><td>Full site backup via BackWPup + SSH database/files archive + hosting panel snapshot</td><td>backup-agent</td></tr>
+          <tr><td><span class="phase-badge phase-execute">EXECUTE</span></td><td>State snapshots, then parallel execution across plugin, provider, custom, theme, content domains</td><td>plugin, provider, custom agents</td></tr>
+          <tr><td style="color:var(--amber);font-weight:700">REGRESSION</td><td>ImageMagick pixel diff + Claude visual judgment on before/after screenshots</td><td>visual-regression</td></tr>
+          <tr><td><span class="phase-badge phase-verify">VERIFY</span></td><td>Re-audit, compute improvement delta, evaluate stop condition</td><td>lighthouse, screenshot</td></tr>
+          <tr><td><span class="phase-badge phase-report">REPORT</span></td><td>Styled HTML report with before/after scores, action log, theme analysis, regression log</td><td>report-agent</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#128257;</div>
+        <p><strong>The loop is self-terminating.</strong> WOW stops when the Lighthouse improvement drops below threshold (default 5%) for two consecutive iterations, or when the maximum iteration count is reached. No infinite loops. No wasted work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── DOMAINS ────── -->
+<section id="domains">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Optimization Domains</div>
+      <h2 class="section-title">Five Domains. Every Layer of the Stack.</h2>
+      <p class="section-desc centered">WOW doesn&rsquo;t just install a caching plugin and call it a day. It optimizes across five distinct domains &mdash; from WordPress plugins to server config to theme assets to content markup.</p>
+    </div>
+
+    <div class="domain-grid mt-6">
+      <div class="domain-card fade-in">
+        <div class="domain-icon">&#128268;</div>
+        <div class="domain-name">Plugin</div>
+        <div class="domain-role">WordPress Plugins</div>
+        <div class="domain-desc">Install and configure free optimization plugins. Caching, image optimization, asset minification, database cleanup.</div>
+        <ul class="domain-items">
+          <li>LiteSpeed Cache / W3 Total Cache</li>
+          <li>EWWW Image Optimizer</li>
+          <li>Autoptimize + Flying Scripts</li>
+          <li>WP-Optimize for database</li>
+        </ul>
+      </div>
+      <div class="domain-card fade-in">
+        <div class="domain-icon">&#9881;&#65039;</div>
+        <div class="domain-name">Provider</div>
+        <div class="domain-role">Server &amp; CDN</div>
+        <div class="domain-desc">Server-level tuning via SSH. PHP-FPM, OPcache, gzip/brotli compression, CDN configuration, cache headers.</div>
+        <ul class="domain-items">
+          <li>OPcache enable + memory tuning</li>
+          <li>PHP-FPM pool optimization</li>
+          <li>Gzip/Brotli compression</li>
+          <li>Cloudflare auto-minify + Rocket Loader</li>
+        </ul>
+      </div>
+      <div class="domain-card fade-in">
+        <div class="domain-icon">&#128221;</div>
+        <div class="domain-name">Custom</div>
+        <div class="domain-role">File Edits</div>
+        <div class="domain-desc">Direct edits to .htaccess, wp-config.php, and must-use plugins. Browser caching rules, compression, performance constants.</div>
+        <ul class="domain-items">
+          <li>wp-config.php constants</li>
+          <li>.htaccess caching + compression</li>
+          <li>mu-plugins for PHP optimizations</li>
+          <li>Security headers</li>
+        </ul>
+      </div>
+      <div class="domain-card fade-in">
+        <div class="domain-icon">&#127912;</div>
+        <div class="domain-name">Theme</div>
+        <div class="domain-role">CSS &amp; Fonts</div>
+        <div class="domain-desc">Theme-level performance fixes via mu-plugin overrides. Never edits theme files directly &mdash; safe for theme updates.</div>
+        <ul class="domain-items">
+          <li>font-display: swap for web fonts</li>
+          <li>Defer render-blocking stylesheets</li>
+          <li>Move scripts to footer</li>
+          <li>Stylesheet bloat reduction</li>
+        </ul>
+      </div>
+      <div class="domain-card fade-in">
+        <div class="domain-icon">&#128444;&#65039;</div>
+        <div class="domain-name">Content</div>
+        <div class="domain-role">Images &amp; Markup</div>
+        <div class="domain-desc">Fix content-level performance issues via WordPress filters. Targets images and markup that cause CLS and slow LCP.</div>
+        <ul class="domain-items">
+          <li>Add loading="lazy" to images</li>
+          <li>Add missing width/height (CLS fix)</li>
+          <li>Generate srcset for responsive images</li>
+          <li>Content image optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── AGENTS ────── -->
+<section id="agents">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Specialist Agents</div>
+      <h2 class="section-title">11 Agents. Each One an Expert.</h2>
+      <p class="section-desc centered">WOW decomposes WordPress optimization into specialized concerns. Each agent owns one domain, reads structured state, writes structured output, and handles its own failure modes gracefully.</p>
+    </div>
+
+    <div class="agent-grid mt-6">
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128200;</div>
+        <div class="agent-name">lighthouse-agent</div>
+        <div class="agent-desc">Lighthouse audit via MCP. Structured performance scores and Core Web Vitals metrics.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128270;</div>
+        <div class="agent-name">inventory-agent</div>
+        <div class="agent-desc">WordPress environment fingerprinting. Plugins, theme, PHP version, server software, hosting provider.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128247;</div>
+        <div class="agent-name">screenshot-agent</div>
+        <div class="agent-desc">Before/after screenshots via Playwright CLI. Visual state capture for regression detection.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#127912;</div>
+        <div class="agent-name">theme-analysis-agent</div>
+        <div class="agent-desc">Render-blocking resources, stylesheet bloat, font loading, DOM size, content image issues.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128203;</div>
+        <div class="agent-name">plan-agent</div>
+        <div class="agent-desc">Gap analysis and action ranking across 5 domains. Regression-aware planning with suspect tracking.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128230;</div>
+        <div class="agent-name">backup-agent</div>
+        <div class="agent-desc">Full WordPress backup via BackWPup + SSH archive + hosting panel snapshot. Before every EXECUTE.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128268;</div>
+        <div class="agent-name">plugin-agent</div>
+        <div class="agent-desc">Install and configure free WP plugins. WP-CLI first, REST API fallback, browser automation last resort.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#9881;&#65039;</div>
+        <div class="agent-name">provider-agent</div>
+        <div class="agent-desc">Server tuning via SSH. OPcache, PHP-FPM, gzip, CDN config. Safety rules enforce config validation.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128221;</div>
+        <div class="agent-name">custom-agent</div>
+        <div class="agent-desc">Direct file edits with timestamped backups. .htaccess, wp-config.php, mu-plugins. Also executes theme + content domain actions.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128065;</div>
+        <div class="agent-name">visual-regression</div>
+        <div class="agent-desc">ImageMagick pixel diff + Claude visual judgment. Detects broken layouts, missing elements, color corruption.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#128202;</div>
+        <div class="agent-name">report-agent</div>
+        <div class="agent-desc">Styled HTML report + markdown summary. Before/after scores, action log, theme analysis, regression log.</div>
+      </div>
+      <div class="agent-card fade-in">
+        <div class="agent-icon">&#127968;</div>
+        <div class="agent-name">hostinger-agent</div>
+        <div class="agent-desc">Dedicated Hostinger hPanel automation. VPS snapshots, LiteSpeed config, plan-tier detection.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── SAFETY ────── -->
+<section id="safety">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Production Safety</div>
+      <h2 class="section-title">Built for Production. Not Just Demos.</h2>
+      <p class="section-desc centered">WOW runs on live WordPress sites. Every safety mechanism exists because production sites are irreplaceable. Backup, snapshot, verify, and rollback &mdash; at every iteration.</p>
+    </div>
+
+    <div class="grid grid-2 mt-6">
+      <div class="layer-card fade-in">
+        <div class="layer-num">1</div>
+        <div>
+          <h3>Full Backup Before Every Change</h3>
+          <p>BackWPup plugin backup (database + files) plus SSH archive plus hosting panel snapshot. Three independent backup layers. Non-blocking &mdash; if one fails, the others still protect you.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">2</div>
+        <div>
+          <h3>Per-Iteration State Snapshots</h3>
+          <p>Every execution agent snapshots the exact state it is about to change: file contents, plugin list, server settings. Stored as structured JSON with full content &mdash; not just metadata.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">3</div>
+        <div>
+          <h3>Visual Regression Detection</h3>
+          <p>After every EXECUTE, ImageMagick computes pixel diff between before and after screenshots. When diff exceeds 5%, Claude inspects both images and classifies the change as expected improvement or regression.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">4</div>
+        <div>
+          <h3>Selective Rollback by Iteration</h3>
+          <p>Roll back to any previous iteration. Each agent reverses exactly what it changed using stored snapshots. Plugins are deactivated (never deleted). Server settings are restored. Files are rewritten to their pre-change content.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">5</div>
+        <div>
+          <h3>HTTP 200 Verification After Every Change</h3>
+          <p>Every agent verifies the site still loads after each modification. If the site breaks, the agent immediately restores from backup and reports the failure. No silent breakage.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">6</div>
+        <div>
+          <h3>Human Confirmation for Rollback</h3>
+          <p>Rollback is never automatic. Even in autonomous mode, WOW pauses and asks before undoing changes. You see the regression severity, the diff image, and exactly what will be reversed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-3 mt-6">
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Regression Detected</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="stop">&#9888; Visual regression detected</span>
+<span class="dim">Iteration 3 &bull; severity: medium</span>
+
+<span class="dim">Judgment:</span> <span class="accent">Header nav</span>
+<span class="accent">collapsed after CSS defer</span>
+
+<span class="dim">Roll back iteration 3?</span>
+<span class="ok">yes</span> / <span class="dim">no</span> / <span class="accent">show diff</span>
+        </div>
+      </div>
+
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Backup Status</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="ok">&#10003; BackWPup</span> <span class="dim">complete</span>
+<span class="dim">  wp-content/backwpup/wow.zip</span>
+
+<span class="ok">&#10003; SSH backup</span> <span class="dim">complete</span>
+<span class="dim">  db: 12.4 MB &bull; files: 847 MB</span>
+
+<span class="ok">&#10003; Hosting snapshot</span> <span class="dim">triggered</span>
+<span class="dim">  via hPanel automation</span>
+        </div>
+      </div>
+
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Iteration Progress</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="ok">WOW</span> <span class="warn">iteration 3/10</span>
+
+<span class="ok">Lighthouse:</span> <span class="accent">41 &rarr; 78</span> <span class="ok">(+90%)</span>
+<span class="ok">LCP:</span> <span class="accent">4.2s &rarr; 1.8s</span>
+<span class="ok">CLS:</span> <span class="accent">0.32 &rarr; 0.04</span>
+
+<span class="dim">Delta this iteration:</span> <span class="ok">+12%</span>
+<span class="dim">Threshold: 5% &bull; continuing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── INSTALL ────── -->
+<section id="install">
+  <div class="container text-center">
+    <div class="section-label">Installation</div>
+    <h2 class="section-title">One Command to Start</h2>
+    <p class="section-desc centered">Install WOW, run <code>/wow</code>, provide your site URL and credentials. Everything else is automatic.</p>
+
+    <div class="install-block mt-4 fade-in">
+      <div class="install-code">
+        <div><span class="comment"># Install WOW</span></div>
+        <div><span class="cmd">/plugin install</span> <span class="flag">alolabs/wow</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Run it</span></div>
+        <div><span class="cmd">/wow</span></div>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#9889;</div>
+        <p><strong>Dependencies install automatically.</strong><br>
+        WOW installs Playwright, ImageMagick, community performance skills, and the Lighthouse MCP server via <code>scripts/install.sh</code>. Just run <code>/wow</code> and answer the intake questions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── CTA ────── -->
+<section class="cta-section" style="padding:80px 0">
+  <div class="container text-center">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title fade-in">The Autonomous WordPress<br>Performance Orchestrator.</h2>
+    <p class="section-desc centered fade-in">Stop tuning WordPress by hand. WOW audits, plans, backs up, executes, detects regressions, verifies improvement, and generates a report &mdash; autonomously, iteratively, safely.</p>
+    <a href="#install" class="btn btn-primary fade-in" style="font-size:1rem;padding:16px 36px">Install WOW &darr;</a>
+  </div>
+</section>
+
+<!-- ────── FOOTER ────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <span style="font-weight:700;color:var(--text-secondary)">WOW</span>
+        <span style="color:var(--text-dim);margin-left:8px;font-size:.8rem">v0.1.2026040201</span>
+      </div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">
+        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/alo-labs/wow" target="_blank">GitHub</a>
+        <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank">MIT License</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ────── SCRIPTS ────── -->
+<script>
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('theme-icon').textContent = dark ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  localStorage.setItem('wow-theme', dark ? 'dark' : 'light');
+}
+function toggleTheme() {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+}
+(function(){
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) { applyTheme(saved === 'dark'); } else { applyTheme(false); }
+})();
+
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
+</script>
+
+</body>
+</html>
