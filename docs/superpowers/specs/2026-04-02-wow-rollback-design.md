@@ -202,7 +202,11 @@ php -r "echo json_encode(opcache_get_configuration());"
 # PHP-FPM pm setting (from active pool config)
 grep -E "^pm\s*=" /etc/php-fpm.d/*.conf 2>/dev/null | head -1
 
-# Check if gzip is enabled in nginx/apache
+# Gzip — nginx
+grep -rE "gzip\s+on" /etc/nginx/ 2>/dev/null | head -1
+
+# Gzip — Apache
+grep -rE "mod_deflate|AddOutputFilterByType DEFLATE" /etc/apache2/ /etc/httpd/ 2>/dev/null | head -1
 ```
 
 For Hostinger/CDN panel values: read from the panel before changing via the same browser automation path used to change them.
@@ -261,13 +265,15 @@ After each file restore: verify site returns HTTP 200 (`curl -s -o /dev/null -w 
 
 ### plugin-agent undo
 
-Compare snapshot `plugins` array against current plugin state. For each plugin that was `inactive` in the snapshot but is now `active`: deactivate it.
+Use the **earliest snapshot in the rollback range** (iteration T+1) as the target state — this represents the plugin state before any of the rolled-back iterations ran. Compare that snapshot's `plugins` array against current plugin state. For each plugin that was `inactive` in the T+1 snapshot but is now `active`: deactivate it.
 
 ```bash
 wp plugin deactivate <slug>
 ```
 
-Do not delete any plugin. Do not touch plugins that were already active before WOW ran.
+Do not delete any plugin. Do not touch plugins that were already active before the rollback range began.
+
+Note: Unlike custom-agent and provider-agent which process each iteration in reverse order, plugin-agent uses a single comparison against the earliest snapshot. This is correct because plugin deactivations are idempotent — it does not matter which specific iteration activated a plugin, only whether it should be active after rollback.
 
 ### provider-agent undo
 
