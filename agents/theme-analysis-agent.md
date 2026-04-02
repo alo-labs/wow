@@ -16,7 +16,7 @@ Runs twice per WOW session:
 | Render-blocking resources | CSS/JS in `<head>` without `async`, `defer`, or `preload`; stylesheets blocking first paint |
 | Stylesheet bloat | Total CSS bytes; number of stylesheets; theme-owned vs plugin-owned breakdown |
 | Web font loading | `@font-face` without `font-display: swap`; Google Fonts blocking render; multiple font foundries loaded |
-| DOM size | Total node count; maximum nesting depth; >1500 nodes = high severity |
+| DOM size | Total node count; maximum nesting depth; >1500 nodes = high; >800 nodes = medium; ≤800 nodes = low |
 | Content image issues | `<img>` without `width`/`height` (CLS source); missing `loading="lazy"` on below-fold images; no `srcset` on large images |
 
 ## Steps
@@ -93,7 +93,7 @@ Note: computer-use and user prompt are intentionally excluded — they cannot re
 ### 2. Read inventory for theme slug
 
 Read the inventory file:
-- For baseline run: `/tmp/.wow/baseline.json` (or `/tmp/.wow/iterations/0/inventory.json` if baseline split)
+- For baseline run: try `/tmp/.wow/baseline.json` first; if not found, try `/tmp/.wow/iterations/0/inventory.json`
 - For final run: `/tmp/.wow/iterations/N/inventory.json`
 
 Extract `active_theme` slug. Use it to classify stylesheet ownership:
@@ -102,14 +102,22 @@ Extract `active_theme` slug. Use it to classify stylesheet ownership:
 
 If inventory file is missing: mark all owners as `"unknown"`.
 
-### 3. Fetch theme CSS sizes
+### 3. Fetch theme CSS content
 
-For each stylesheet URL with `owner: "theme"`, fetch and measure byte size:
+For each stylesheet URL with `owner: "theme"`, fetch and save to a temp file:
 ```bash
-curl -s --max-time 10 -o /dev/null -w "%{size_download}" "<url>"
+curl -s --max-time 10 -o /tmp/.wow/theme-css-tmp.css "<url>"
 ```
 
-If fetch fails: record `null` for that stylesheet's size.
+Measure byte size after fetch:
+```bash
+wc -c < /tmp/.wow/theme-css-tmp.css
+```
+
+If fetch fails or temp file is empty: record `null` for that stylesheet's size and content.
+
+Save the CSS text per URL in memory for use in Step 4's font-display check.
+Delete temp file when done with each stylesheet.
 
 ### 4. Classify findings by severity
 
@@ -135,7 +143,7 @@ If fetch fails: record `null` for that stylesheet's size.
 - node_count <= 800 → `severity: "low"`
 
 **Content images:**
-- `<img>` without `width` and `height` → `severity: "medium"` (CLS risk)
+- `<img>` without `width` OR without `height` (either missing) → `severity: "medium"` (CLS risk)
 - `<img>` without `loading="lazy"` and NOT in viewport → `severity: "medium"`
 - `<img>` without `srcset` → `severity: "low"`
 
@@ -159,10 +167,9 @@ Write to the appropriate path:
     }
   ],
   "stylesheet_bloat": {
-    "total_bytes": 0,
     "count": 0,
     "theme_bytes": 0,
-    "plugin_bytes": 0
+    "theme_bytes_note": "only theme-owned stylesheets are fetched; plugin/unknown bytes are not measured"
   },
   "font_issues": [
     {
