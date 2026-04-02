@@ -436,7 +436,10 @@ section:nth-child(even){background:var(--section-alt)}
 }
 
 /* ───── CREDITS ───── */
-.credits-section{border-top:1px solid var(--border);padding:56px 0}
+.credits-section{
+  border-top:1px solid var(--border);padding:56px 0;
+  background:var(--section-alt);
+}
 .credits-section .credits-title{
   font-size:.7rem;font-weight:700;text-transform:uppercase;
   letter-spacing:.12em;color:var(--text-dim);margin-bottom:28px;
@@ -460,6 +463,7 @@ section:nth-child(even){background:var(--section-alt)}
 footer{
   border-top:1px solid var(--border);padding:48px 0;
   color:var(--text-dim);font-size:.85rem;
+  background:var(--bg-card);
 }
 footer .footer-inner{
   display:flex;justify-content:space-between;align-items:center;
@@ -1007,11 +1011,19 @@ footer .footer-links{display:flex;gap:24px}
         </ul>
       </div>
       <div class="credits-group">
+        <h4>Claude Skills</h4>
+        <ul class="credits-list">
+          <li><a href="https://github.com/wordpress/agent-skills" target="_blank" rel="noopener">wordpress/agent-skills</a></li>
+          <li><a href="https://github.com/jeffallan/claude-skills" target="_blank" rel="noopener">jeffallan/claude-skills</a></li>
+          <li><a href="https://github.com/addyosmani/web-quality-skills" target="_blank" rel="noopener">addyosmani/web-quality-skills</a></li>
+          <li><a href="https://github.com/priyankark/lighthouse-mcp" target="_blank" rel="noopener">priyankark/lighthouse-mcp</a></li>
+        </ul>
+      </div>
+      <div class="credits-group">
         <h4>Tools &amp; Libraries</h4>
         <ul class="credits-list">
           <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a></li>
           <li><a href="https://imagemagick.org" target="_blank" rel="noopener">ImageMagick</a></li>
-          <li><a href="https://github.com/priyankark/lighthouse-mcp" target="_blank" rel="noopener">lighthouse-mcp</a></li>
           <li><a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener">Lighthouse</a></li>
           <li><a href="https://wp-cli.org" target="_blank" rel="noopener">WP-CLI</a></li>
         </ul>
