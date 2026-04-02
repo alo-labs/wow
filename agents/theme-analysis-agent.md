@@ -122,10 +122,12 @@ If fetch fails: record `null` for that stylesheet's size.
 - Theme CSS total > 100 KB → `severity: "medium"`
 - Theme CSS total > 50 KB → `severity: "low"`
 
-**Font issues** (inferred from stylesheet URLs and Google Fonts presence):
-- `fonts.googleapis.com` in headLinks without preconnect hint → `severity: "high"`
-- Multiple font foundries (>1 font provider domain) → `severity: "medium"`
-- (font-display swap cannot be checked without CSS parsing — flag Google Fonts as potential issue)
+**Font issues:**
+- `fonts.googleapis.com` in headLinks without preconnect hint → `severity: "high"`, issue: `blocking_google_fonts`
+- Multiple font foundries (>1 font provider domain) → `severity: "medium"`, issue: `multiple_foundries`
+- For each theme-owned stylesheet fetched in Step 3: search the CSS text for `font-display` keyword.
+  If `font-display: swap` is absent from any `@font-face` block (or `font-display` does not appear at all): → `severity: "medium"`, issue: `missing_font_display_swap`
+  (Use the CSS text already fetched in Step 3 — no extra request needed. If CSS text was not fetched or fetch failed: skip this check for that stylesheet.)
 
 **DOM size:**
 - node_count > 1500 → `severity: "high"`
@@ -164,7 +166,7 @@ Write to the appropriate path:
   },
   "font_issues": [
     {
-      "issue": "blocking_google_fonts|multiple_foundries",
+      "issue": "missing_font_display_swap|blocking_google_fonts|multiple_foundries",
       "url": "<url>",
       "severity": "high|medium"
     }
