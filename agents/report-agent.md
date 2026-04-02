@@ -43,7 +43,7 @@ Read `/tmp/.wow/iterations/N/delta.json`:
 For each iteration 1 through N:
 - Read `/tmp/.wow/iterations/<i>/actions.json` → collect `applied` array
 - If `/tmp/.wow/iterations/<i>/hostinger-actions.json` exists → append its `actions` array
-- Group all collected actions by `domain`: plugin, provider, custom
+- Group all collected actions by `domain`: plugin, provider, custom, theme, content
 
 ### 6. Read remaining gaps
 
@@ -112,6 +112,12 @@ Iterations: <N> | Stop reason: <reason>
 <list: - <action> — <status>>
 
 ### Custom (<count> actions)
+<list: - <action> — <status>>
+
+### Theme (<count> actions)
+<list: - <action> — <status>>
+
+### Content (<count> actions)
 <list: - <action> — <status>>
 
 ## Remaining Gaps
@@ -221,6 +227,14 @@ Structure:
   </details>
   <details>
     <summary>Custom (<count>)</summary>
+    <ul><!-- action items --></ul>
+  </details>
+  <details>
+    <summary>Theme (<count>)</summary>
+    <ul><!-- action items --></ul>
+  </details>
+  <details>
+    <summary>Content (<count>)</summary>
     <ul><!-- action items --></ul>
   </details>
 
