@@ -435,6 +435,27 @@ section:nth-child(even){background:var(--section-alt)}
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
 }
 
+/* ───── CREDITS ───── */
+.credits-section{border-top:1px solid var(--border);padding:56px 0}
+.credits-section .credits-title{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--text-dim);margin-bottom:28px;
+}
+.credits-groups{display:flex;flex-wrap:wrap;gap:40px;justify-content:center}
+.credits-group{}
+.credits-group h4{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--text-dim);margin-bottom:12px;
+}
+.credits-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.credits-list a{
+  display:inline-block;padding:5px 14px;border-radius:999px;
+  font-size:.78rem;font-weight:500;text-decoration:none;
+  color:var(--text-secondary);border:1px solid var(--border);
+  background:var(--bg-card);transition:all .2s;
+}
+.credits-list a:hover{border-color:var(--accent);color:var(--accent-light);background:var(--accent-glow)}
+
 /* ───── FOOTER ───── */
 footer{
   border-top:1px solid var(--border);padding:48px 0;
@@ -967,6 +988,37 @@ footer .footer-links{display:flex;gap:24px}
     <a href="#install" class="btn btn-primary fade-in" style="font-size:1rem;padding:16px 36px">Install WOW! &darr;</a>
   </div>
 </section>
+
+<!-- ────── CREDITS ────── -->
+<div class="credits-section">
+  <div class="container text-center">
+    <div class="credits-title">Built on the shoulders of giants</div>
+    <div class="credits-groups">
+      <div class="credits-group">
+        <h4>WordPress Plugins</h4>
+        <ul class="credits-list">
+          <li><a href="https://wordpress.org/plugins/litespeed-cache/" target="_blank" rel="noopener">LiteSpeed Cache</a></li>
+          <li><a href="https://wordpress.org/plugins/w3-total-cache/" target="_blank" rel="noopener">W3 Total Cache</a></li>
+          <li><a href="https://wordpress.org/plugins/ewww-image-optimizer/" target="_blank" rel="noopener">EWWW Image Optimizer</a></li>
+          <li><a href="https://wordpress.org/plugins/autoptimize/" target="_blank" rel="noopener">Autoptimize</a></li>
+          <li><a href="https://wordpress.org/plugins/flying-scripts/" target="_blank" rel="noopener">Flying Scripts</a></li>
+          <li><a href="https://wordpress.org/plugins/wp-optimize/" target="_blank" rel="noopener">WP-Optimize</a></li>
+          <li><a href="https://wordpress.org/plugins/backwpup/" target="_blank" rel="noopener">BackWPup</a></li>
+        </ul>
+      </div>
+      <div class="credits-group">
+        <h4>Tools &amp; Libraries</h4>
+        <ul class="credits-list">
+          <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a></li>
+          <li><a href="https://imagemagick.org" target="_blank" rel="noopener">ImageMagick</a></li>
+          <li><a href="https://github.com/priyankark/lighthouse-mcp" target="_blank" rel="noopener">lighthouse-mcp</a></li>
+          <li><a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener">Lighthouse</a></li>
+          <li><a href="https://wp-cli.org" target="_blank" rel="noopener">WP-CLI</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ────── FOOTER ────── -->
 <footer>
