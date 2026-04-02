@@ -276,8 +276,11 @@ Structure:
 
   <h2>Screenshots</h2>
   <div class="screenshots">
-    <div><img src="<before_path>" alt="Before"><div class="label">Before</div></div>
-    <div><img src="<after_path>" alt="After"><div class="label">After</div></div>
+    <!-- For before_screenshot and after_screenshot: read the image file, encode it: -->
+    <!-- base64 -i <screenshot_path> -->
+    <!-- Embed as data URI. If the file cannot be read: omit that screenshot with a note "(screenshot not available)". -->
+    <div><img src="data:image/png;base64,<before_base64_data>" alt="Before screenshot" style="max-width:100%;"><div class="label">Before</div></div>
+    <div><img src="data:image/png;base64,<after_base64_data>" alt="After screenshot" style="max-width:100%;"><div class="label">After</div></div>
   </div>
 </body>
 </html>

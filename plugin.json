@@ -14,7 +14,8 @@
     "skills/wow-audit",
     "skills/wow-plan",
     "skills/wow-execute",
-    "skills/wow-verify"
+    "skills/wow-verify",
+    "skills/wow-report"
   ],
   "install_hook": "scripts/install.sh",
   "dependencies": {

@@ -44,6 +44,12 @@ Only dispatch an agent if it has at least one action assigned.
 
 Do not proceed until all dispatched agents have returned.
 
+### 3b. Handle Hostinger fallback
+
+If the Hostinger agent was dispatched and returned `status: "fallback_to_provider"`:
+- Re-dispatch using `agents/provider-agent.md` with the same provider-domain actions.
+- Wait for the generic provider-agent to complete before proceeding to Step 4.
+
 ### 4. Save executed actions
 
 Merge agent reports into `/tmp/.wow/iterations/N/actions.json`:
