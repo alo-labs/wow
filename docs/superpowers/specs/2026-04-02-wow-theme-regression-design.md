@@ -44,13 +44,17 @@ Modified:
 | `/tmp/.wow/iterations/N/visual-regression.json` | visual-regression-agent | After each EXECUTE |
 | `/tmp/.wow/iterations/N/diff.png` | visual-regression-agent | When ImageMagick diff runs |
 
-### Orchestrator changes (minimal)
+Note: `N` throughout this spec is a placeholder for the current iteration number (e.g. `/tmp/.wow/iterations/3/diff.png`).
 
-Two new dispatch points in `skills/wow/SKILL.md`:
+### Orchestrator changes
 
-1. **After baseline audit completes (Step 4):** dispatch `theme-analysis-agent` → save output to `/tmp/.wow/theme-analysis-baseline.json`
-2. **After each EXECUTE (Step 5c), before VERIFY:** dispatch `visual-regression-agent` → save output to `/tmp/.wow/iterations/N/visual-regression.json`
-3. **After final iteration audit (when `delta.json` contains `stop: true`, re-audit runs):** dispatch `theme-analysis-agent` → save output to `/tmp/.wow/iterations/N/theme-analysis-final.json`
+Three additions to `skills/wow/SKILL.md`. References to existing step headings in that file:
+
+1. **After `### 4. Run AUDIT phase (first baseline)` completes:** dispatch `theme-analysis-agent` → save output to `/tmp/.wow/theme-analysis-baseline.json`
+
+2. **After `### 5c. EXECUTE` completes, before `### 5d. VERIFY`:** dispatch `visual-regression-agent` → save output to `/tmp/.wow/iterations/N/visual-regression.json`
+
+3. **After the final iteration's re-audit** (which already runs as part of the VERIFY → delta.json → `stop: true` cycle — no new audit step needed): dispatch `theme-analysis-agent` → save output to `/tmp/.wow/iterations/N/theme-analysis-final.json`. The final re-audit is the existing `@wow-audit` invocation in the loop. The third dispatch point is added immediately after it when `delta.json` has `stop: true`.
 
 ---
 
@@ -58,12 +62,12 @@ Two new dispatch points in `skills/wow/SKILL.md`:
 
 ### Role
 
-Identify theme- and content-level performance pathologies by fetching the live page via Playwright CLI and analyzing its resource graph, DOM structure, and image attributes.
+Identify theme- and content-level performance pathologies by fetching the live page and analyzing its resource graph, DOM structure, and image attributes.
 
 ### When it runs
 
-- After baseline audit (iteration 0) → writes `theme-analysis-baseline.json`
-- After final iteration audit (loop exit) → writes `iterations/N/theme-analysis-final.json`
+- After baseline audit (iteration 0) → writes `/tmp/.wow/theme-analysis-baseline.json`
+- After final iteration audit (loop exit) → writes `/tmp/.wow/iterations/N/theme-analysis-final.json`
 
 ### Detection categories
 
@@ -77,15 +81,21 @@ Identify theme- and content-level performance pathologies by fetching the live p
 
 ### How it works
 
-1. Run Playwright CLI to evaluate the page and extract resource data:
+1. Write a temporary Node.js script to `/tmp/.wow/theme-analysis-extract.js` that uses the Playwright API to:
+   - Navigate to `<site_url>`
+   - Extract: all `<link>` and `<script>` tags in `<head>` with their attributes; total DOM node count and max nesting depth; all `<img>` tags with `src`, `width`, `height`, `loading`, `srcset` attributes; all loaded stylesheet URLs
+   - Return the result as JSON to stdout
+
+   Run the script:
    ```bash
-   npx playwright evaluate --browser=chromium <site_url> "<js_expression>"
+   node /tmp/.wow/theme-analysis-extract.js
    ```
-   JS expressions collect: all `<link>` and `<script>` tags in `<head>` with their attributes; total DOM node count and max nesting depth; all `<img>` tags with `src`, `width`, `height`, `loading`, `srcset` attributes; all `@font-face` declarations from loaded stylesheets.
 
-2. Read `inventory.json` to get the active theme slug — used to classify stylesheet ownership (theme-owned vs plugin-owned).
+   Delete the temp script after use.
 
-3. Fetch each theme-owned CSS URL and measure byte size.
+2. Read `/tmp/.wow/iterations/N/inventory.json` (or `/tmp/.wow/baseline.json` for the baseline run) to get the active theme slug — used to classify stylesheet ownership (theme-owned vs plugin-owned).
+
+3. Fetch each theme-owned CSS URL via `curl -s --max-time 10` and measure byte size.
 
 4. Classify each finding by severity:
    - `high`: render-blocking stylesheet, >1500 DOM nodes, font blocking render
@@ -96,8 +106,14 @@ Identify theme- and content-level performance pathologies by fetching the live p
 
 ### Output schema
 
+The top-level `status` field is always present:
+- `"done"` — analysis completed normally
+- `"skipped"` — no browser tool available (see graceful degradation)
+
 ```json
 {
+  "status": "done|skipped",
+  "reason": "<only present when status is skipped>",
   "site_url": "<url>",
   "timestamp": "<ISO 8601>",
   "render_blocking": [
@@ -143,9 +159,17 @@ Identify theme- and content-level performance pathologies by fetching the live p
 
 ### Graceful degradation
 
-- If Playwright CLI is unavailable: fall through to Claude-in-Chrome to navigate the page and extract resource data via `mcp__Claude_in_Chrome__javascript_tool`
-- If both are unavailable: write `{ "status": "skipped", "reason": "no_browser_tool_available" }` — non-blocking
+**Browser automation ladder for this agent (2-tier — DOM extraction only):**
+
+`computer-use` and user prompt are intentionally excluded: computer-use cannot return structured DOM data programmatically, and user prompt is inappropriate for automated analysis. Only tiers that can execute JavaScript and return structured output are used.
+
+- **Tier 1 — Node.js + Playwright script** (as described above): full extraction
+- **Tier 2 — Claude-in-Chrome**: navigate to `<site_url>`, use `mcp__Claude_in_Chrome__javascript_tool` to run equivalent JS expressions and return results
+- **If both unavailable**: write `{ "status": "skipped", "reason": "no_browser_tool_available" }` — non-blocking
+
+Additional degradation:
 - If inventory.json is missing: skip theme-owned classification; mark all owners as `unknown`
+- If a CSS fetch fails: record `theme_bytes: null` for that stylesheet
 
 ---
 
@@ -157,27 +181,29 @@ Compare before/after screenshots for each iteration to detect visual regressions
 
 ### When it runs
 
-After every EXECUTE (Step 5c), before VERIFY.
+After every EXECUTE (`### 5c. EXECUTE` in `skills/wow/SKILL.md`), before VERIFY.
 
 ### How it works
 
-1. Read `iterations/N/screenshot-before.json` and `iterations/N/screenshot-after.json` — get both image paths.
+1. Read `/tmp/.wow/iterations/N/screenshot-before.json` and `/tmp/.wow/iterations/N/screenshot-after.json` — get both image paths.
 
 2. If either screenshot is missing or has `status: "skipped"`: write `{ "status": "skipped", "reason": "screenshot_unavailable" }` and exit.
 
-3. Run pixel diff via ImageMagick:
+3. Check ImageMagick availability and install if needed (see below). If unavailable after install attempt: skip to step 5 with `pixel_diff: "skipped"`.
+
+4. Run pixel diff via ImageMagick:
    ```bash
    compare -metric AE -fuzz 5% <before.png> <after.png> /tmp/.wow/iterations/N/diff.png 2>&1
    ```
    Compute `diff_pct = changed_pixels / total_pixels * 100`.
 
-4. If `diff_pct <= 5%`: write `{ "status": "clean", "diff_pct": N }` — no regression, done.
+5. If `diff_pct <= 5%` (or pixel diff was skipped and Claude judges no significant change): write `{ "status": "clean" }` — done.
 
-5. If `diff_pct > 5%`: Claude reads both screenshots visually and judges:
+6. If `diff_pct > 5%` (threshold is strictly greater than 5): Claude reads both screenshots visually and judges:
    - **Expected change**: layout improved — content reflow from image optimization, plugin UI removed, debug bar hidden → `status: "expected_change"`
    - **Regression**: broken layout, missing elements, overlapping content, color corruption, navigation collapsed → `status: "regression_flagged"`
 
-6. Write output JSON.
+7. Write output JSON.
 
 ### ImageMagick availability
 
@@ -200,17 +226,19 @@ If install fails: skip pixel diff step entirely and proceed directly to Claude v
   "iteration": 1,
   "status": "clean|expected_change|regression_flagged|skipped",
   "diff_pct": 3.2,
-  "diff_image_path": "/tmp/.wow/iterations/N/diff.png",
+  "diff_image_path": "/tmp/.wow/iterations/1/diff.png",
   "judgment": "<Claude's description of what changed>",
   "severity": "none|low|medium|high",
   "pixel_diff": "done|skipped"
 }
 ```
 
+Note: `diff_image_path` is the absolute local path to the ImageMagick diff image (e.g., `/tmp/.wow/iterations/3/diff.png`). Only present when `pixel_diff: "done"`.
+
 Severity mapping:
 - `none`: clean or expected_change with diff_pct < 10%
 - `low`: expected_change with diff_pct >= 10%
-- `medium`: regression_flagged with diff_pct 5–20%
+- `medium`: regression_flagged with diff_pct > 5% and <= 20%
 - `high`: regression_flagged with diff_pct > 20%
 
 ---
@@ -219,8 +247,10 @@ Severity mapping:
 
 ### New inputs
 
-- Read `/tmp/.wow/theme-analysis-baseline.json` on the first iteration (if present)
-- Read `/tmp/.wow/iterations/N/visual-regression.json` on subsequent iterations (if present)
+- Read `/tmp/.wow/theme-analysis-baseline.json` on the first iteration (if present and `status: "done"`)
+- Read `/tmp/.wow/iterations/N-1/visual-regression.json` on iterations 2+ (previous iteration's result, if present)
+
+Note: the plan agent reads the **previous** iteration's visual-regression.json (N-1), not the current one. The current iteration's regression check runs after EXECUTE, which happens after PLAN. The plan for iteration N uses regression data from iteration N-1 to inform `regression_suspects`.
 
 ### New action categories
 
@@ -245,17 +275,17 @@ Theme/content findings from `theme-analysis-baseline.json` are ranked by severit
 
 ### Regression awareness
 
-If `visual-regression.json` from the previous iteration has `status: "regression_flagged"`:
-- Note which actions were executed in that iteration (from `iterations/N-1/actions.json`)
+If `/tmp/.wow/iterations/N-1/visual-regression.json` has `status: "regression_flagged"`:
+- Read `/tmp/.wow/iterations/N-1/actions.json` — this file is written by the execute phase's `custom-agent`, `plugin-agent`, and `provider-agent` (see existing agent specs) — to identify which actions ran in that iteration
 - Add them to a `regression_suspects` array in `plan.json`
-- This data surfaces in the report — the plan agent does not exclude or revert these actions
+- The plan agent does not exclude or revert these actions — flagging only
 
 ### Updated plan.json schema additions
 
 ```json
 {
-  "actions": [...],
-  "unresolved_gaps": [...],
+  "actions": [],
+  "unresolved_gaps": [],
   "regression_suspects": [
     {
       "iteration": 2,
@@ -272,7 +302,7 @@ If `visual-regression.json` from the previous iteration has `status: "regression
 
 ### New section: Theme & Content Analysis
 
-Shown when `theme-analysis-baseline.json` exists. Compares baseline vs final findings.
+Shown when `theme-analysis-baseline.json` exists and has `status: "done"`. Compares baseline vs final findings.
 
 ```
 ## Theme & Content Analysis
@@ -285,13 +315,13 @@ Shown when `theme-analysis-baseline.json` exists. Compares baseline vs final fin
 | Content image issues  | 12       | 3      | ✓ fixed  |
 ```
 
-If final analysis was not run (loop stopped early): show baseline findings only with note "Final analysis not run — loop exited before completion."
+If final analysis was not run (loop stopped early or `theme-analysis-final.json` absent): show baseline findings only with note "Final analysis not run — loop exited before completion."
 
-If theme-analysis-baseline.json is missing: omit section entirely.
+If `theme-analysis-baseline.json` is missing or has `status: "skipped"`: omit section entirely.
 
 ### New section: Visual Regression Log
 
-Shown when any iteration has `status != "clean"`.
+Shown when any iteration has `status != "clean"` and `status != "skipped"`.
 
 ```
 ## Visual Regression Log
@@ -303,7 +333,7 @@ Shown when any iteration has `status != "clean"`.
 
 If all iterations are clean: single line "No visual regressions detected across N iterations."
 
-In the HTML report: each `regression_flagged` row includes a collapsible `<details>` element containing the diff PNG inline (`<img src="<diff_image_path>">`) for visual inspection.
+In the HTML report: each `regression_flagged` row includes a collapsible `<details>` element. The diff image is embedded as a base64 data URI (`<img src="data:image/png;base64,...">`), since `file://` paths to `/tmp/` are not served by browsers. The report agent reads the diff PNG from `diff_image_path`, base64-encodes it, and inlines it.
 
 ---
 
@@ -328,12 +358,12 @@ command -v compare >/dev/null 2>&1 \
 
 | Condition | Behavior |
 |---|---|
-| Playwright CLI unavailable for theme analysis | Fall through to Claude-in-Chrome JS execution |
-| Both browser tools unavailable | Skip theme analysis; write skipped status |
+| Node.js/Playwright script fails for theme analysis | Fall through to Claude-in-Chrome JS execution |
+| Both browser tools unavailable | Skip theme analysis; write `{ "status": "skipped" }` |
 | ImageMagick not installed + install fails | Skip pixel diff; Claude compares screenshots directly |
-| Before/after screenshots missing | Skip visual regression for that iteration |
-| theme-analysis-baseline.json missing | Plan agent skips theme/content gap discovery; report omits section |
-| Loop exits before final audit | Report shows baseline theme analysis only |
+| Before/after screenshots missing or skipped | Skip visual regression for that iteration; write `{ "status": "skipped" }` |
+| `theme-analysis-baseline.json` missing or skipped | Plan agent skips theme/content gap discovery; report omits section |
+| Loop exits before final audit | Report shows baseline theme analysis only with note |
 
 ---
 
