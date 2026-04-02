@@ -104,6 +104,10 @@ screenshot-agent in parallel. Wait for all to complete.
 Save results to `/tmp/.wow/baseline.json` on the first run.
 Save to `/tmp/.wow/iterations/N/audit.json` on subsequent runs (N = current_iteration).
 
+After the baseline audit completes (first run only): dispatch `theme-analysis-agent`.
+Save its output to `/tmp/.wow/theme-analysis-baseline.json`.
+If the agent returns `status: "skipped"`, log it and continue — non-blocking.
+
 ### 5. Loop: PLAN → EXECUTE → VERIFY
 
 Repeat until stop condition is met:
@@ -118,9 +122,20 @@ Read `session.json`. If `autonomy_mode == "supervised"`:
 
 **c. EXECUTE**: Invoke `@wow-execute`. Save executed actions to `/tmp/.wow/iterations/N/actions.json`.
 
+**c2. VISUAL REGRESSION**: Dispatch `visual-regression-agent`.
+Save its output to `/tmp/.wow/iterations/N/visual-regression.json`.
+Non-blocking — proceed to VERIFY regardless of result.
+
 **d. VERIFY**: Invoke `@wow-verify`. It computes delta_pct and writes `/tmp/.wow/iterations/N/delta.json`.
 Read the delta.json. The loop-controller hook will have already evaluated stop conditions.
-If delta.json contains `"stop": true`, exit the loop and go to step 6.
+If delta.json contains `"stop": true`:
+  - Dispatch `theme-analysis-agent` for the final analysis.
+    Save its output to `/tmp/.wow/iterations/N/theme-analysis-final.json`.
+  - Exit the loop and go to step 6.
+
+Note: Do NOT add a new `@wow-audit` invocation here. The final re-audit is the existing `@wow-audit`
+already invoked inside the VERIFY step as part of the delta.json calculation. The theme-analysis-agent
+dispatch follows that existing audit — no additional audit step is needed.
 Otherwise increment `current_iteration` in session.json and loop back to PLAN.
 
 ### 6. Generate REPORT
