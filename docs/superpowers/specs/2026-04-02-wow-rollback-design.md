@@ -100,22 +100,29 @@ If BackWPup installation fails: log `status: "failed"` and continue — SSH back
 
 **If SSH available:**
 
-1. Export database:
+1. Create backup directory with restricted permissions:
    ```bash
-   wp db export /tmp/.wow-db-backup-N.sql
+   mkdir -p /tmp/.wow/backups && chmod 700 /tmp/.wow/backups
    ```
 
-2. Archive WordPress files (exclude `uploads/` if >500MB to keep archiving fast):
+2. Export database:
+   ```bash
+   wp db export /tmp/.wow/backups/db-backup-N.sql
+   chmod 600 /tmp/.wow/backups/db-backup-N.sql
+   ```
+
+3. Archive WordPress files (exclude `uploads/` if >500MB to keep archiving fast):
    ```bash
    # Check uploads size first
    du -sh <wp_root>/wp-content/uploads/
    # If <= 500MB: include uploads
-   tar -czf /tmp/.wow-files-backup-N.tar.gz <wp_root>
+   tar -czf /tmp/.wow/backups/files-backup-N.tar.gz <wp_root>
    # If > 500MB: exclude uploads
-   tar -czf /tmp/.wow-files-backup-N.tar.gz --exclude=<wp_root>/wp-content/uploads <wp_root>
+   tar -czf /tmp/.wow/backups/files-backup-N.tar.gz --exclude=<wp_root>/wp-content/uploads <wp_root>
+   chmod 600 /tmp/.wow/backups/files-backup-N.tar.gz
    ```
 
-3. Record both paths in `backup.json`.
+4. Record both paths in `backup.json`.
 
 **If SSH unavailable — hosting panel fallback:**
 
@@ -137,8 +144,8 @@ Use the 4-tier browser automation ladder to trigger a hosting panel snapshot or 
     "status": "done|failed|skipped"
   },
   "ssh_backup": {
-    "db_path": "/tmp/.wow-db-backup-1.sql",
-    "files_path": "/tmp/.wow-files-backup-1.tar.gz",
+    "db_path": "/tmp/.wow/backups/db-backup-1.sql",
+    "files_path": "/tmp/.wow/backups/files-backup-1.tar.gz",
     "uploads_excluded": false,
     "status": "done|failed|skipped"
   },

@@ -95,11 +95,16 @@ Identify theme- and content-level performance pathologies by fetching the live p
 
 2. Read `/tmp/.wow/iterations/N/inventory.json` (or `/tmp/.wow/baseline.json` for the baseline run) to get the active theme slug — used to classify stylesheet ownership (theme-owned vs plugin-owned).
 
-3. Fetch each theme-owned CSS URL via `curl -s --max-time 10` and measure byte size.
+3. Fetch each theme-owned CSS URL and measure byte size. Save the CSS text per URL for use in Step 4's font-display check:
+   ```bash
+   curl -s --max-time 10 -o /tmp/.wow/theme-css-tmp.css "<url>"
+   wc -c < /tmp/.wow/theme-css-tmp.css
+   ```
+   Delete temp file when done with each stylesheet.
 
-4. Classify each finding by severity:
+4. Search each fetched CSS file for the `font-display` keyword to detect missing `font-display: swap` declarations. Classify each finding by severity:
    - `high`: render-blocking stylesheet, >1500 DOM nodes, font blocking render
-   - `medium`: missing `font-display: swap`, stylesheet >100 KB, multiple font foundries, missing `loading="lazy"` on images
+   - `medium`: missing `font-display: swap` (detected by searching fetched CSS for `font-display`), stylesheet >100 KB, multiple font foundries, missing `loading="lazy"` on images
    - `low`: missing `srcset`, missing image dimensions, stylesheet >50 KB
 
 5. Write output JSON.
@@ -125,10 +130,9 @@ The top-level `status` field is always present:
     }
   ],
   "stylesheet_bloat": {
-    "total_bytes": 0,
     "count": 0,
     "theme_bytes": 0,
-    "plugin_bytes": 0
+    "theme_bytes_note": "only theme-owned stylesheets are fetched; plugin/unknown bytes are not measured"
   },
   "font_issues": [
     {
