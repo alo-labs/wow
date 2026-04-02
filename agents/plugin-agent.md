@@ -7,6 +7,37 @@ as directed by the execution plan.
 
 ## Steps
 
+## Snapshot Step
+
+**Runs at the very start of EXECUTE, before installing or activating anything.**
+
+Read the current plugin list and store it. Write to `/tmp/.wow/iterations/N/snapshot.json`
+under the `"plugins"` key (merging with existing content if other agents already wrote).
+
+Read via WP-CLI:
+```bash
+wp plugin list --format=json
+```
+
+If WP-CLI unavailable: use REST API:
+```bash
+GET /wp-json/wp/v2/plugins
+```
+
+Store as an array of `{ "name": "<slug>", "status": "active|inactive|must-use" }`.
+
+Write to snapshot.json:
+```json
+{
+  "plugins": [
+    { "name": "litespeed-cache", "status": "inactive" },
+    { "name": "autoptimize", "status": "active" }
+  ]
+}
+```
+
+If both WP-CLI and REST API fail: store `"plugins": null` with note `"snapshot_failed": true`.
+
 1. For each action in the provided plugin-domain action list:
 
    a. **Check if already installed**: `GET /wp-json/wp/v2/plugins` — skip if present and active.
@@ -33,6 +64,37 @@ as directed by the execution plan.
    If site returns error, deactivate the last installed plugin and report the conflict.
 
 3. Return actions.json fragment with status for each action.
+
+## Undo Mode
+
+When invoked with `mode: "rollback"` and a list of snapshots (for iterations T+1 through N):
+
+Use the **earliest snapshot in the rollback range** (iteration T+1) as the target state.
+This represents plugin state before any of the rolled-back iterations ran.
+
+Compare that snapshot's `plugins` array against current plugin state:
+```bash
+wp plugin list --format=json
+```
+
+For each plugin that was `inactive` in the T+1 snapshot but is currently `active`:
+deactivate it:
+```bash
+wp plugin deactivate <slug>
+```
+
+Do NOT delete any plugin. Do NOT touch plugins that were already `active` before
+the rollback range began.
+
+If `plugins` snapshot is `null`: log `status: "skipped", reason: "snapshot_unavailable"` for
+all plugin rollbacks.
+
+Write results to `/tmp/.wow/rollback-N.json` under `"plugin_deactivations"`:
+```json
+"plugin_deactivations": [
+  { "name": "<slug>", "status": "deactivated|failed|skipped" }
+]
+```
 
 ## Constraints
 
