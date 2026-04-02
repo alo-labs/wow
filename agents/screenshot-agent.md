@@ -7,7 +7,7 @@ final REPORT. This agent captures screenshots only — no visual diff analysis.
 
 ## Steps
 
-1. Capture full-page screenshot using the 4-tier browser automation ladder:
+1. Capture full-page screenshot using the 3-tier browser automation ladder + graceful skip (Tier 4 user prompt is not applicable — screenshots are non-blocking and require no credentials):
 
    **Tier 1 — Playwright CLI:**
    - Check availability: `npx playwright --version >/dev/null 2>&1`

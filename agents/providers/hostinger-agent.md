@@ -119,7 +119,7 @@ Write actions.json fragment to `/tmp/.wow/iterations/N/hostinger-actions.json`:
     {
       "action": "Enable Hostinger CDN",
       "domain": "provider",
-      "status": "done|user_action_required",
+      "status": "done|failed|skipped",
       "method": "claude-in-chrome|computer-use|user_prompt",
       "hpanel_path": "Sites → CDN → Enable",
       "notes": ""
@@ -128,4 +128,4 @@ Write actions.json fragment to `/tmp/.wow/iterations/N/hostinger-actions.json`:
 }
 ```
 
-Status values: `"done"` | `"failed"` | `"skipped"` | `"user_action_required"` | `"aborted"`
+Status values: `"done"` | `"failed"` | `"skipped"` | `"fallback_to_provider"`

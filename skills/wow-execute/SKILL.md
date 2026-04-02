@@ -26,7 +26,7 @@ Partition actions by domain:
 
 ### 2. Dispatch agents in parallel
 
-Launch all three agents simultaneously using the Agent tool.
+Launch agents simultaneously (up to three: plugin-agent, provider-agent or hostinger-agent, custom-agent).
 Only dispatch an agent if it has at least one action assigned.
 
 - **plugin-agent**: Read `agents/plugin-agent.md`. Pass: plugin-domain actions, WP credentials from session context, site URL.

@@ -22,7 +22,19 @@ is assigned to exactly one execution domain to prevent runtime conflicts.
      in the output plan.json. Do not exclude or revert these actions.
    - If file missing or `status` is not `"regression_flagged"`: no regression_suspects needed.
 
-1. Read the provided audit.json. Identify performance gaps ordered by potential impact:
+1. Read the provided audit.json.
+
+   If audit.json is missing or all `scores` values are null: return an empty plan:
+   ```json
+   {
+     "iteration": "N",
+     "actions": [],
+     "unresolved_gaps": [{ "gap": "Audit data unavailable", "reason": "lighthouse-agent failed or audit.json missing" }]
+   }
+   ```
+   Do not proceed with gap analysis — there is no data to plan from.
+
+   Identify performance gaps ordered by potential impact:
    - High impact: LCP > 2500ms, Performance score < 50, render-blocking resources
    - Medium impact: CLS > 0.1, INP > 200ms, unoptimized images, no caching
    - Low impact: missing compression, no CDN, database bloat

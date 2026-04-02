@@ -34,7 +34,7 @@ grep -rE "mod_deflate|AddOutputFilterByType DEFLATE" /etc/apache2/ /etc/httpd/ 2
 
 For CDN/hosting panel values (Cloudflare auto-minify, Rocket Loader, etc.): read the
 current setting from the panel using the same browser automation path used to change
-them (Playwright CLI → Claude-in-Chrome → computer-use). Store `null` for any value
+them (Playwright CLI → Claude-in-Chrome → computer-use → user prompt for credentials only if auth needed). Store `null` for any value
 that cannot be read.
 
 Write to snapshot.json:
