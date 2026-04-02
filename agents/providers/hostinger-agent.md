@@ -33,9 +33,10 @@ Use `morrealev/wordpress-manager` to:
 - Capture returned action list + per-action status
 - Note: wordpress-manager handles LiteSpeed Cache configuration if `litespeed_present == true`
 
-If wordpress-manager is not installed or unavailable:
-- Log: `{ "action": "wordpress-manager", "status": "skipped", "reason": "not_installed" }`
-- Write `{ "agent": "hostinger-agent", "status": "aborted", "reason": "wordpress-manager not installed" }` to `/tmp/.wow/iterations/N/hostinger-actions.json` and stop.
+If `wordpress-manager` skill is not available:
+- Log: "wordpress-manager unavailable — falling back to generic provider-agent"
+- Return `{ "status": "fallback_to_provider", "reason": "wordpress-manager_unavailable" }`
+- The orchestrator (wow-execute) should re-dispatch using `agents/provider-agent.md` instead.
 
 ### 3. VPS tier only — invoke hostinger-agent-skills
 
@@ -89,15 +90,11 @@ Run the following hPanel tasks. For each, attempt tiers in order until one succe
 - Log: `{ "method": "computer-use", "status": "done" }`
 - If the tool call raises an error or returns a failure, fall through to Tier 4.
 
-**Tier 4 — user prompt:**
-- Emit structured request:
-  ```
-  ACTION REQUIRED: [task name]
-  Navigate to: hPanel → [exact path]
-  Goal: [what to enable/set]
-  After completing, type "done" to continue.
-  ```
-- Log: `{ "method": "user_prompt", "status": "user_action_required" }`
+**Tier 4 — user prompt (credentials and sign-in ONLY):**
+Ask the human ONLY for hPanel login credentials or to complete sign-in (e.g., 2FA).
+After auth, proceed autonomously using Tiers 1–3 to complete the hPanel task.
+NEVER ask the human to click, navigate, configure, or perform any hPanel action.
+If Tiers 1–3 cannot complete the task after auth: log `status: "failed"` — do not ask the user to do it manually.
 
 ### 5. Write output
 
