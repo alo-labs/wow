@@ -37,12 +37,21 @@ Re-check after install attempt. If still not available: set `pixel_diff: "skippe
 
 ### 3. Run pixel diff
 
+Before running compare, verify both images have the same pixel dimensions:
+```bash
+identify -format "%wx%h" <before_path>
+identify -format "%wx%h" <after_path>
+```
+If dimensions differ: set `pixel_diff: "skipped"`, add `"reason": "dimension_mismatch"` to output, and skip to Step 4.
+
 ```bash
 compare -metric AE -fuzz 5% <before_path> <after_path> \
   /tmp/.wow/iterations/N/diff.png 2>/tmp/.wow/iterations/N/diff-metric.txt
 ```
 
 Read the metric output (pixel count of changed pixels) from `diff-metric.txt`.
+Parse: read the last numeric token from `diff-metric.txt` (ImageMagick may prefix warnings or other lines).
+If the file is empty, non-numeric, or parse fails: set `pixel_diff: "skipped"` and skip to Step 4.
 Compute:
 ```
 total_pixels = width * height  (get from: identify -format "%[fx:w*h]" <before_path>)
@@ -51,7 +60,7 @@ diff_pct = changed_pixels / total_pixels * 100
 
 If `diff_pct <= 5%`: write clean result and exit:
 ```json
-{ "iteration": N, "status": "clean", "diff_pct": N, "pixel_diff": "done", "severity": "none" }
+{ "iteration": N, "status": "clean", "diff_pct": 3.2, "diff_image_path": "/tmp/.wow/iterations/N/diff.png", "pixel_diff": "done", "severity": "none" }
 ```
 
 ### 4. Claude visual judgment (diff_pct > 5% or pixel_diff skipped)
