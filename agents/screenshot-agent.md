@@ -30,7 +30,8 @@ final REPORT. This agent captures screenshots only — no visual diff analysis.
 
 2. Save screenshot to `/tmp/.wow/screenshots/iteration-N-<before|after>.png`.
 
-3. Write the path reference to the output file:
+3. Write the JSON reference file to `/tmp/.wow/iterations/N/screenshot-before.json`
+   (or `screenshot-after.json`):
 ```json
 {
   "iteration": "N",
@@ -39,6 +40,12 @@ final REPORT. This agent captures screenshots only — no visual diff analysis.
   "timestamp": "<ISO 8601>"
 }
 ```
+
+> **Output paths:**
+> - JSON reference: `/tmp/.wow/iterations/N/screenshot-before.json` (or `screenshot-after.json`)
+> - PNG image: `/tmp/.wow/screenshots/iteration-N-<before|after>.png` (path recorded in the JSON `path` field)
+>
+> These paths are read by `visual-regression-agent` and `report-agent`.
 
 4. After capturing, perform a basic visual health check:
    - Confirm the page is rendering (not a blank page or fatal error screen)

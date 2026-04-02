@@ -241,6 +241,10 @@ Structure:
   <h2>Remaining Gaps</h2>
   <ul class="gap-list"><!-- gaps or "(none)" --></ul>
 
+  <!-- Note: The `{{if}}` / `{{else}}` / `{{/if}}` blocks below are instructional pseudocode —
+       the agent constructs the HTML string programmatically, not via a template engine. Evaluate
+       each condition and emit only the matching branch as raw HTML. -->
+
   <h2>Theme &amp; Content Analysis</h2>
 {{if theme_analysis is not null}}
 <div class="theme-section">
