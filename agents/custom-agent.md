@@ -8,6 +8,46 @@ orchestrator direct intervention.
 
 ## Steps
 
+## Snapshot Step
+
+**Runs at the very start of EXECUTE, before making any changes.**
+
+Read the full content of every file this agent is about to modify. Resolve paths
+from `inventory.json` `document_root` field. Write to `/tmp/.wow/iterations/N/snapshot.json`
+under the `"files"` key.
+
+Files to snapshot:
+- `<document_root>/.htaccess`
+- `<document_root>/wp-config.php`
+- `<document_root>/wp-content/mu-plugins/wow-custom.php`
+
+For each file:
+- If the file exists: read full content and store as a string
+- If the file does not exist: store `null` (rollback will delete it if WOW creates it)
+
+Read via SSH:
+```bash
+cat <document_root>/.htaccess
+cat <document_root>/wp-config.php
+cat <document_root>/wp-content/mu-plugins/wow-custom.php
+```
+
+If SSH unavailable: store `null` for all files with note `"ssh_unavailable": true`.
+
+Write to snapshot.json (merging with existing content if plugin-agent or provider-agent
+already wrote their sections):
+```json
+{
+  "iteration": 1,
+  "timestamp": "<ISO 8601>",
+  "files": {
+    "<document_root>/.htaccess": "<full content or null>",
+    "<document_root>/wp-config.php": "<full content or null>",
+    "<document_root>/wp-content/mu-plugins/wow-custom.php": "<full content or null>"
+  }
+}
+```
+
 1. For each action in the custom-domain action list:
 
    **wp-config.php optimizations** (via SSH or WP file system):
@@ -45,6 +85,38 @@ orchestrator direct intervention.
    If error, restore backup immediately and report `status: failed`.
 
 3. Return actions.json fragment with status per action.
+
+## Undo Mode
+
+When invoked with `mode: "rollback"` and a list of snapshots (from iterations T+1
+through N, in reverse order — i.e., start with snapshot N, end with snapshot T+1):
+
+For each snapshot in reverse order, for each file in `snapshot.files`:
+- If snapshot value is a string: write that content back to the file path via SSH
+  ```bash
+  cat > <path> << 'WOWEOF'
+  <snapshot content>
+  WOWEOF
+  ```
+- If snapshot value is `null`: delete the file (WOW created it from scratch)
+  ```bash
+  rm -f <path>
+  ```
+
+After each file restore: verify site returns HTTP 200:
+```bash
+curl -s -o /dev/null -w "%{http_code}" <site_url>
+```
+If non-200: log `status: "failed"` for that file, continue with remaining files.
+
+If SSH unavailable for a restore: log `status: "skipped", reason: "ssh_unavailable"`.
+
+Write results to `/tmp/.wow/rollback-N.json` under `"file_restores"`:
+```json
+"file_restores": [
+  { "path": "<path>", "status": "restored|deleted|failed|skipped" }
+]
+```
 
 ## Safety Rules
 
