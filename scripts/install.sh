@@ -50,6 +50,15 @@ npx playwright install --with-deps chromium \
   && echo "  ✓ playwright" || echo "  ⚠ playwright install failed (non-fatal)"
 
 echo ""
+echo "--- Installing ImageMagick (for visual regression diff) ---"
+
+command -v compare >/dev/null 2>&1 \
+  && echo "  ✓ imagemagick already installed" \
+  || (brew install imagemagick 2>/dev/null \
+      || apt-get install -y imagemagick 2>/dev/null \
+      || echo "  ⚠ imagemagick install failed (non-fatal — visual diff will use Claude vision fallback)")
+
+echo ""
 echo "--- Configuring lighthouse MCP in Claude config ---"
 
 CLAUDE_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
