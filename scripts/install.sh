@@ -29,13 +29,9 @@ npx skills add addyosmani/web-quality-skills@best-practices -g -y \
   && echo "  ✓ best-practices" || echo "  ⚠ best-practices install failed (non-fatal)"
 
 echo ""
-echo "--- Installing Hostinger provider skills (optional — only needed for Hostinger sites) ---"
-
-/plugin install hostinger/hostinger-agent-skills \
-  && echo "  ✓ hostinger-agent-skills" || echo "  ⚠ hostinger-agent-skills install failed (non-fatal — only needed for Hostinger sites)"
-
-/plugin install morrealev/wordpress-manager \
-  && echo "  ✓ wordpress-manager" || echo "  ⚠ wordpress-manager install failed (non-fatal — only needed for Hostinger sites)"
+echo "--- Hostinger provider skills (install via Claude Code REPL if needed) ---"
+echo "  ℹ hostinger-agent-skills: run '/plugin install hostinger/hostinger-agent-skills' in Claude Code"
+echo "  ℹ wordpress-manager: run '/plugin install morrealev/wordpress-manager' in Claude Code"
 
 echo ""
 echo "--- Installing MCP servers ---"

@@ -32,7 +32,7 @@ check "settings.json valid JSON"   "$(valid_json settings.json)"
 
 echo ""
 echo "--- Skills ---"
-for skill in wow wow-intake wow-audit wow-plan wow-execute wow-verify; do
+for skill in wow wow-intake wow-audit wow-plan wow-execute wow-verify wow-report; do
   check "$skill/SKILL.md exists" "$(file_exists skills/$skill/SKILL.md)"
   check "$skill has ## Purpose"  "$(has_section skills/$skill/SKILL.md Purpose)"
   check "$skill has ## Process"  "$(has_section skills/$skill/SKILL.md Process)"
@@ -40,7 +40,7 @@ done
 
 echo ""
 echo "--- Agents ---"
-for agent in lighthouse-agent inventory-agent screenshot-agent plan-agent plugin-agent provider-agent custom-agent; do
+for agent in lighthouse-agent inventory-agent screenshot-agent plan-agent plugin-agent provider-agent custom-agent backup-agent theme-analysis-agent visual-regression-agent report-agent; do
   check "$agent.md exists"        "$(file_exists agents/$agent.md)"
   check "$agent has ## Role"      "$(has_section agents/$agent.md Role)"
   check "$agent has ## Steps"     "$(has_section agents/$agent.md Steps)"
