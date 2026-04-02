@@ -26,19 +26,25 @@ Emit it directly to the terminal as formatted output.
 
 ### 3. Open HTML report
 
-Use the 3-tier browser automation ladder to open `/tmp/.wow/report.html`:
+Use the 4-tier browser automation ladder to open `/tmp/.wow/report.html`:
 
-**Tier 1 — Claude-in-Chrome:**
+**Tier 1 — Playwright CLI:**
+- Check: `npx playwright --version >/dev/null 2>&1`
+- If available: `npx playwright screenshot --browser=chromium file:///tmp/.wow/report.html /tmp/.wow/report-screenshot.png`
+  (This opens the file in a real browser to verify it renders correctly.)
+- If not available or fails: fall through to Tier 2
+
+**Tier 2 — Claude-in-Chrome:**
 - Check: is `mcp__Claude_in_Chrome__navigate` callable?
 - If yes: navigate to `file:///tmp/.wow/report.html`
-- If tool call raises error or returns failure: fall through to Tier 2
-
-**Tier 2 — computer-use:**
-- Check: is `mcp__computer-use__screenshot` callable?
-- If yes: open the file using OS file-open via computer-use
 - If tool call raises error or returns failure: fall through to Tier 3
 
-**Tier 3 — print path:**
+**Tier 3 — computer-use:**
+- Check: is `mcp__computer-use__screenshot` callable?
+- If yes: open the file using OS file-open via computer-use
+- If tool call raises error or returns failure: fall through to Tier 4
+
+**Tier 4 — print path:**
 - Emit: "Report saved to: /tmp/.wow/report.html"
 - Do NOT ask the human to open it
 

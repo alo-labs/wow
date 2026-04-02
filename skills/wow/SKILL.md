@@ -85,7 +85,10 @@ Create `/tmp/.wow/` directory. Initialize `session.json`:
   "current_iteration": 0,
   "consecutive_below_threshold": 0,
   "focus_areas": "everything",
-  "status": "intake"
+  "status": "intake",
+  "ssh_available": false,
+  "backups": [],
+  "errors": []
 }
 ```
 

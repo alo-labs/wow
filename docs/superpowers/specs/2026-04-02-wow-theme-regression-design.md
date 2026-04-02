@@ -370,7 +370,7 @@ command -v compare >/dev/null 2>&1 \
 ## Non-Goals
 
 - Does not auto-rollback changes when regression is detected
-- Does not pause the loop when regression is detected
+- Does not pause the loop when regression is detected (superseded by sub-project 7: rollback spec adds a user-confirmation pause for regression_flagged, but never pauses autonomously)
 - Does not analyze theme PHP logic or server-side rendering performance
 - Does not compare CSS files directly — works from the rendered page only
 - Does not replace Lighthouse — adds to it, never replaces it
