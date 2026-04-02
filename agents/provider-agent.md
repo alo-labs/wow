@@ -7,6 +7,52 @@ by the execution plan. Operates only when SSH or hosting credentials are availab
 
 ## Steps
 
+## Snapshot Step
+
+**Runs at the very start of EXECUTE, before changing any server settings.**
+
+Read current server and CDN settings via SSH. Write to `/tmp/.wow/iterations/N/snapshot.json`
+under the `"server"` key (merging with existing content if other agents already wrote).
+
+If SSH unavailable: store `"server": null` and continue — rollback will skip server
+restores with a warning.
+
+Read values:
+```bash
+# OPcache enabled and memory
+php -r "echo json_encode(opcache_get_configuration());"
+
+# PHP-FPM pm setting
+grep -E "^pm\s*=" /etc/php-fpm.d/*.conf 2>/dev/null | head -1
+
+# Gzip — nginx
+grep -rE "gzip\s+on" /etc/nginx/ 2>/dev/null | head -1
+
+# Gzip — Apache
+grep -rE "mod_deflate|AddOutputFilterByType DEFLATE" /etc/apache2/ /etc/httpd/ 2>/dev/null | head -1
+```
+
+For CDN/hosting panel values (Cloudflare auto-minify, Rocket Loader, etc.): read the
+current setting from the panel using the same browser automation path used to change
+them (Playwright CLI → Claude-in-Chrome → computer-use). Store `null` for any value
+that cannot be read.
+
+Write to snapshot.json:
+```json
+{
+  "server": {
+    "opcache_enabled": false,
+    "opcache_memory_consumption": 64,
+    "php_fpm_pm": "dynamic",
+    "gzip_enabled": false,
+    "cdn_minify_enabled": false,
+    "cdn_rocket_loader": false
+  }
+}
+```
+
+Store `null` for any key that could not be read.
+
 1. If no SSH/hosting credentials in session context, return all actions as
    `status: skipped, reason: no_ssh_access`. Do not fail.
 
@@ -48,3 +94,33 @@ by the execution plan. Operates only when SSH or hosting credentials are availab
    - Log each action with `method: "playwright-cli"`, `"claude-in-chrome"`, `"computer-use"`, or `"user_prompt"`
 
 3. Return actions.json fragment with status per action.
+
+## Undo Mode
+
+When invoked with `mode: "rollback"` and a list of snapshots (for iterations T+1 through N,
+in reverse order):
+
+For each snapshot in reverse order, for each key in `snapshot.server`:
+- If the value is `null`: skip with warning `"skipped — no snapshot value"`
+- If the value is non-null: restore via SSH or hosting panel
+
+Restore commands by key:
+- `opcache_enabled: false` → set `opcache.enable=0` in php.ini and restart PHP-FPM:
+  `sudo systemctl restart php-fpm`
+- `opcache_enabled: true` → set `opcache.enable=1` in php.ini and restart PHP-FPM
+- `opcache_memory_consumption: N` → set `opcache.memory_consumption=N` in php.ini and restart PHP-FPM
+- `php_fpm_pm: "dynamic"` → restore pm setting in active pool config and restart PHP-FPM
+- `gzip_enabled: false` → disable gzip in nginx (`gzip off;`) or Apache (comment out mod_deflate) and reload
+- `cdn_minify_enabled: false` → disable auto-minify via CDN panel (same browser automation path as EXECUTE)
+- `cdn_rocket_loader: false` → disable Rocket Loader via Cloudflare panel
+
+If `server` snapshot is `null`: log `status: "skipped", reason: "no_ssh_access"` for
+all server rollbacks.
+
+Write results to `/tmp/.wow/rollback-N.json` under `"server_restores"`:
+```json
+"server_restores": [
+  { "key": "opcache_enabled", "value": false, "status": "restored|failed|skipped" }
+]
+```
+
