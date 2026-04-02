@@ -7,10 +7,13 @@ PHP version, server software, and hosting provider detection.
 
 ## Steps
 
-1. Call the WP REST API: `GET /wp-json/wp/v2/plugins` (requires auth).
-   If unavailable, use WP-CLI: `wp plugin list --format=json`.
+1. Get installed plugins. Try WP-CLI first (CLI-first principle):
+   `wp plugin list --format=json`
+   If WP-CLI unavailable, fall back to REST API: `GET /wp-json/wp/v2/plugins` (requires auth).
 
-2. Call `GET /wp-json/wp/v2/themes` for active theme info.
+2. Get active theme info. Try WP-CLI first:
+   `wp theme list --status=active --format=json`
+   If WP-CLI unavailable: `GET /wp-json/wp/v2/themes`.
 
 3. Detect server stack from HTTP response headers:
    - `X-Powered-By` → PHP version
@@ -30,6 +33,9 @@ PHP version, server software, and hosting provider detection.
      or "cloud", or subdomain `*.hostinger.website`
    - Default: `shared`
    - If `hosting_provider != "hostinger"`: omit `plan_tier` or set to `""` (empty string)
+
+If both WP-CLI and REST API fail for any step: write the field as `null` in the output JSON
+and continue with remaining steps. Never abort entirely — partial inventory is better than none.
 
 5. Return as JSON and write to `/tmp/.wow/iterations/N/inventory.json`:
 ```json

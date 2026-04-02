@@ -124,3 +124,14 @@ Write results to `/tmp/.wow/rollback-N.json` under `"server_restores"`:
 ]
 ```
 
+## Safety Rules
+
+- Always back up config files before modification (copy original with timestamped suffix)
+- Verify site returns HTTP 200 after every server configuration change
+- Never restart PHP-FPM without first validating the new config is syntactically valid:
+  `php-fpm -t` (for PHP-FPM) or `nginx -t` (for nginx) or `apachectl configtest` (for Apache)
+- Never modify core web server binary files or OS-level system configs
+- If a service restart fails, immediately restore the backup config and restart again
+- When modifying CDN/hosting panel settings via browser automation, note the original value
+  in the action log before changing it
+
