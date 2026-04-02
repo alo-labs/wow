@@ -1,6 +1,6 @@
 ---
 name: wow-execute
-description: WOW execute phase — dispatches plugin, provider, and custom agents in parallel to apply the optimization plan.
+description: WOW execute phase — dispatches plugin, provider, custom, theme, and content agents in parallel to apply the optimization plan.
 ---
 
 # WOW Execute
@@ -21,6 +21,8 @@ Partition actions by domain:
 - `plugin` actions → plugin-agent
 - `provider` actions → provider-agent
 - `custom` actions → custom-agent
+- `theme` actions → custom-agent (theme actions are mu-plugin overrides — same execution path as custom)
+- `content` actions → custom-agent (content actions are WordPress filters in mu-plugin — same execution path as custom)
 
 ### 2. Dispatch agents in parallel
 
@@ -36,7 +38,7 @@ Only dispatch an agent if it has at least one action assigned.
     → Read `agents/provider-agent.md`
   - Pass: provider-domain actions, SSH/hosting credentials from session context,
     site URL, full inventory from audit.json.
-- **custom-agent**: Read `agents/custom-agent.md`. Pass: custom-domain actions, SSH credentials from session context, site URL.
+- **custom-agent**: Read `agents/custom-agent.md`. Pass: custom-domain actions + theme-domain actions + content-domain actions (combined), SSH credentials from session context, site URL.
 
 ### 3. Wait for all agents
 

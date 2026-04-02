@@ -44,7 +44,7 @@ The plan.json schema:
   "actions": [
     {
       "rank": 1,
-      "domain": "plugin|provider|custom",
+      "domain": "plugin|provider|custom|theme|content",
       "description": "Install and configure LiteSpeed Cache",
       "resource": "litespeed-cache",
       "resource_type": "wp_plugin",
@@ -57,13 +57,22 @@ The plan.json schema:
       "gap": "description of unresolvable issue",
       "reason": "why no resource covers it"
     }
+  ],
+  "regression_suspects": [
+    {
+      "iteration": 2,
+      "action": "<action description from previous iteration>",
+      "regression_severity": "medium"
+    }
   ]
 }
 ```
 
+`regression_suspects` is omitted when empty (no regression flagged in the previous iteration).
+
 ### 4. Report plan
 
-Emit summary: "Plan ready — N actions across plugin/provider/custom domains. N unresolved gaps."
+Emit summary: "Plan ready — N actions across plugin/provider/custom/theme/content domains. N unresolved gaps."
 
 If there are unresolved gaps and no community resource exists, note them for potential
 orchestrator direct intervention after EXECUTE + VERIFY.
