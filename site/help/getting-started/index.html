@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — WOW! Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../help.css">
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="nav-logo" href="../../index.html">WOW!</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="../index.html" class="nav-active">Help</a></li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i data-lucide="sun"></i>
+  </button>
+</nav>
+
+<!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
+<div class="breadcrumb">
+  <a href="../index.html">Help</a>
+  <span class="sep">›</span>
+  <span class="current">Getting Started</span>
+</div>
+
+<!-- ── Article Hero ─────────────────────────────────────────────────── -->
+<div class="article-hero">
+  <h1>Getting Started</h1>
+  <p>Install WOW! and run your first autonomous optimization in under 2 minutes.</p>
+</div>
+
+<!-- ── Doc Layout ───────────────────────────────────────────────────── -->
+<div class="doc-layout">
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar">
+    <input class="nav-search" id="nav-search-input" type="search" placeholder="Search…" autocomplete="off">
+    <div id="nav-search-results"></div>
+    <p class="sidebar-heading">On This Page</p>
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#first-run">Your First Run</a></li>
+        <li><a href="#whats-next">What's Next</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <main class="doc-content">
+
+    <h2 id="requirements">Requirements</h2>
+    <p>Before installing WOW!, make sure your environment meets these minimum requirements:</p>
+    <ul>
+      <li><strong>WordPress</strong> 5.8 or later</li>
+      <li><strong>WP-CLI</strong> 2.5 or later — <a href="https://wp-cli.org/" target="_blank" rel="noopener">Install WP-CLI</a></li>
+      <li><strong>PHP</strong> 7.4 or later (PHP 8.0+ recommended)</li>
+      <li>Shell access to your WordPress server</li>
+    </ul>
+    <p>WOW! runs entirely via WP-CLI as a package. No plugin installation or admin UI required.</p>
+
+    <h2 id="install">Install</h2>
+    <p>Install WOW! using the WP-CLI package manager:</p>
+    <pre><code>wp package install alo-labs/wow</code></pre>
+    <p>This downloads WOW! from <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">github.com/alo-labs/wow</a> and registers it as a WP-CLI command. The installation is global — once installed, WOW! is available for any WordPress site you manage with WP-CLI.</p>
+    <p>To verify the installation:</p>
+    <pre><code>wp package list | grep wow</code></pre>
+
+    <h2 id="first-run">Your First Run</h2>
+    <p>Navigate to your WordPress root directory and run:</p>
+    <pre><code>/wow</code></pre>
+    <p>WOW! will immediately begin the autonomous optimization pipeline:</p>
+    <ol>
+      <li><strong>Audit</strong> — Lighthouse scan and Core Web Vitals baseline</li>
+      <li><strong>Plan</strong> — Orchestrator builds a prioritized change plan</li>
+      <li><strong>Backup</strong> — Full site backup (database + files) before any changes</li>
+      <li><strong>Execute</strong> — 11 specialist agents apply changes in dependency order</li>
+      <li><strong>Verify</strong> — Visual regression detection confirms nothing is broken</li>
+      <li><strong>Report</strong> — Before/after metrics and a summary of all changes made</li>
+    </ol>
+    <p>The entire pipeline typically completes in 5–15 minutes depending on site size and server speed.</p>
+    <p>To run an audit without making any changes (dry run):</p>
+    <pre><code>/wow --dry-run</code></pre>
+
+    <h2 id="whats-next">What's Next</h2>
+    <div class="whats-next">
+      <h3>Continue Learning</h3>
+      <ul>
+        <li><a href="../concepts/index.html"><i data-lucide="layers"></i> Core Concepts</a></li>
+        <li><a href="../optimization/index.html"><i data-lucide="git-branch"></i> Optimization Workflow</a></li>
+        <li><a href="../reference/index.html"><i data-lucide="book-open"></i> CLI Reference</a></li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────────────── -->
+<footer class="help-footer">
+  <p>WOW! Help Center</p>
+  <nav>
+    <a href="../../index.html">Home</a>
+    <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+  </nav>
+  <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
+</footer>
+
+<script src="../search.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function() {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('wow-theme', next);
+    lucide.createIcons();
+  });
+
+  lucide.createIcons();
+
+  // Sidebar search
+  var navInput = document.getElementById('nav-search-input');
+  if (navInput) {
+    navInput.addEventListener('input', function() {
+      renderNavSearch(navInput.value, '../');
+    });
+  }
+})();
+</script>
+<script>
+(function() {
+  var headings = document.querySelectorAll('.doc-content h2[id]');
+  var links = document.querySelectorAll('.sidebar-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.sidebar-nav a[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(function(h) { observer.observe(h); });
+})();
+</script>
+</body>
+</html>
