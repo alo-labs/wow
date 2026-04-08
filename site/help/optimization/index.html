@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimization Workflow — WOW! Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../help.css">
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="nav-logo" href="../../index.html">WOW!</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="../index.html" class="nav-active">Help</a></li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i data-lucide="sun"></i>
+  </button>
+</nav>
+
+<!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
+<div class="breadcrumb">
+  <a href="../index.html">Help</a>
+  <span class="sep">›</span>
+  <span class="current">Optimization Workflow</span>
+</div>
+
+<!-- ── Article Hero ─────────────────────────────────────────────────── -->
+<div class="article-hero">
+  <h1>Optimization Workflow</h1>
+  <p>WOW! runs a 6-step autonomous pipeline every time you invoke <code>/wow</code>. Here is exactly what happens.</p>
+</div>
+
+<!-- ── Doc Layout ───────────────────────────────────────────────────── -->
+<div class="doc-layout">
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar">
+    <input class="nav-search" id="nav-search-input" type="search" placeholder="Search…" autocomplete="off">
+    <div id="nav-search-results"></div>
+    <p class="sidebar-heading">On This Page</p>
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#step-audit">1 — Audit</a></li>
+        <li><a href="#step-plan">2 — Plan</a></li>
+        <li><a href="#step-backup">3 — Backup</a></li>
+        <li><a href="#step-execute">4 — Execute</a></li>
+        <li><a href="#step-verify">5 — Verify</a></li>
+        <li><a href="#step-report">6 — Report</a></li>
+        <li><a href="#whats-next">What's Next</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <main class="doc-content">
+
+    <h2 id="overview">Overview</h2>
+    <p>WOW! runs a 6-step pipeline automatically when you run <code>/wow</code>. No configuration is required for the first run. Each step is logged in real time so you can follow along.</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Step</th><th>What happens</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Audit</td><td>Measure current performance and inventory the site</td></tr>
+        <tr><td>2</td><td>Plan</td><td>Build a prioritized change plan — no changes yet</td></tr>
+        <tr><td>3</td><td>Backup</td><td>Full site snapshot before any change is applied</td></tr>
+        <tr><td>4</td><td>Execute</td><td>Specialist agents apply changes in dependency order</td></tr>
+        <tr><td>5</td><td>Verify</td><td>Visual regression detection and Lighthouse re-run</td></tr>
+        <tr><td>6</td><td>Report</td><td>Before/after metrics and full change log</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="step-audit">Step 1 — Audit</h2>
+    <p>The <strong>Audit agent</strong> performs a comprehensive baseline scan before any changes are made:</p>
+    <ul>
+      <li>Runs a <strong>Lighthouse</strong> scan against your site's front page and key URLs</li>
+      <li>Captures <strong>Core Web Vitals</strong> baseline: LCP, CLS, FID/INP, and TTFB</li>
+      <li>Inventories installed plugins, active theme, PHP version, and server configuration</li>
+      <li>Identifies quick wins (high-impact, low-risk changes) vs. longer-term improvements</li>
+    </ul>
+    <p>Audit results are stored and referenced throughout the rest of the pipeline. No changes are made during this step.</p>
+
+    <h2 id="step-plan">Step 2 — Plan</h2>
+    <p>The <strong>Orchestrator</strong> reviews audit findings and builds a prioritized change plan:</p>
+    <ul>
+      <li>Scores each finding by estimated impact and implementation risk</li>
+      <li>Sequences agent tasks to respect dependencies (e.g., CSS/JS minification before caching, image compression before CDN push)</li>
+      <li>Flags any changes that require manual confirmation (rare)</li>
+    </ul>
+    <p>The plan is printed to the console so you can review it before execution. In <code>--dry-run</code> mode, WOW! stops here and outputs the full plan without making any changes.</p>
+
+    <h2 id="step-backup">Step 3 — Backup</h2>
+    <p>The <strong>Backup agent</strong> creates a complete, timestamped snapshot of your site:</p>
+    <ul>
+      <li>Full WordPress database export (<code>.sql.gz</code>)</li>
+      <li>Complete <code>wp-content/</code> file archive (<code>.tar.gz</code>)</li>
+      <li>Snapshot stored in <code>wp-content/wow-backups/</code></li>
+      <li>Optionally offloaded to remote storage (configurable in <code>wow.config.json</code>)</li>
+    </ul>
+    <p>This snapshot is the rollback point for the current run. WOW! will not proceed to execution if the backup fails.</p>
+
+    <h2 id="step-execute">Step 4 — Execute</h2>
+    <p>Specialist agents apply the planned changes in dependency order. Each change is isolated and logged individually:</p>
+    <ul>
+      <li><strong>CSS/JS agent</strong> — minifies and defers scripts/styles</li>
+      <li><strong>Image agent</strong> — compresses images and adds lazy-load attributes</li>
+      <li><strong>Caching agent</strong> — configures server and browser cache headers</li>
+      <li><strong>CDN agent</strong> — pushes static assets to the configured CDN</li>
+      <li><strong>Database agent</strong> — optimizes slow queries and cleans revisions</li>
+      <li><strong>Security agent</strong> — enforces SSL and sets security headers</li>
+      <li><strong>SEO agent</strong> — repairs meta tags and structured data</li>
+    </ul>
+    <p>Any agent can be skipped with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-database</code>).</p>
+
+    <h2 id="step-verify">Step 5 — Verify</h2>
+    <p>The <strong>Testing agent</strong> verifies that all changes are safe:</p>
+    <ul>
+      <li>Compares screenshots taken before and after execution (visual regression detection)</li>
+      <li>If a regression is detected, <strong>automatic rollback</strong> triggers immediately — restoring the backup from Step 3</li>
+      <li>Runs a second Lighthouse scan to confirm performance improvements</li>
+      <li>Logs a before/after comparison of all Core Web Vitals</li>
+    </ul>
+    <p>Screenshots are saved alongside the report so you can inspect them directly.</p>
+
+    <h2 id="step-report">Step 6 — Report</h2>
+    <p>WOW! generates a detailed report at the end of every run:</p>
+    <ul>
+      <li><strong>Before/after Core Web Vitals</strong> — LCP, CLS, INP, TTFB with delta</li>
+      <li><strong>Complete change log</strong> — every action taken by every agent</li>
+      <li><strong>Skipped items</strong> — changes that were planned but not applied, with reasons</li>
+      <li>Output in HTML and JSON (configurable)</li>
+    </ul>
+    <p>To view the last report without re-running:</p>
+    <pre><code>/wow --report</code></pre>
+
+    <h2 id="whats-next">What's Next</h2>
+    <div class="whats-next">
+      <h3>Continue Learning</h3>
+      <ul>
+        <li><a href="../reference/index.html"><i data-lucide="book-open"></i> Reference</a></li>
+        <li><a href="../troubleshooting/index.html"><i data-lucide="life-buoy"></i> Troubleshooting</a></li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────────────── -->
+<footer class="help-footer">
+  <p>WOW! Help Center</p>
+  <nav>
+    <a href="../../index.html">Home</a>
+    <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+  </nav>
+  <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
+</footer>
+
+<script src="../search.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function() {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('wow-theme', next);
+    lucide.createIcons();
+  });
+
+  lucide.createIcons();
+
+  var navInput = document.getElementById('nav-search-input');
+  if (navInput) {
+    navInput.addEventListener('input', function() {
+      renderNavSearch(navInput.value, '../');
+    });
+  }
+})();
+</script>
+<script>
+(function() {
+  var headings = document.querySelectorAll('.doc-content h2[id]');
+  var links = document.querySelectorAll('.sidebar-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.sidebar-nav a[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(function(h) { observer.observe(h); });
+})();
+</script>
+</body>
+</html>
