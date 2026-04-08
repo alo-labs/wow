@@ -89,10 +89,10 @@
     <p>Audit results are stored and referenced throughout the rest of the pipeline. No changes are made during this step.</p>
 
     <h2 id="step-plan">Step 2 — Plan</h2>
-    <p>The <strong>Orchestrator</strong> reviews audit findings and builds a prioritized change plan:</p>
+    <p>The <strong>Planner agent</strong> reviews audit findings and builds a prioritized change plan:</p>
     <ul>
       <li>Scores each finding by estimated impact and implementation risk</li>
-      <li>Sequences agent tasks to respect dependencies (e.g., CSS/JS minification before caching, image compression before CDN push)</li>
+      <li>Sequences agent tasks to respect dependencies</li>
       <li>Flags any changes that require manual confirmation (rare)</li>
     </ul>
     <p>The plan is printed to the console so you can review it before execution. In <code>--dry-run</code> mode, WOW! stops here and outputs the full plan without making any changes.</p>
@@ -102,7 +102,7 @@
     <ul>
       <li>Full WordPress database export (<code>.sql.gz</code>)</li>
       <li>Complete <code>wp-content/</code> file archive (<code>.tar.gz</code>)</li>
-      <li>Snapshot stored in <code>wp-content/wow-backups/</code></li>
+      <li>Snapshot stored in <code>/tmp/.wow/backups/</code></li>
       <li>Optionally offloaded to remote storage (configurable in <code>wow.config.json</code>)</li>
     </ul>
     <p>This snapshot is the rollback point for the current run. WOW! will not proceed to execution if the backup fails.</p>
@@ -110,21 +110,19 @@
     <h2 id="step-execute">Step 4 — Execute</h2>
     <p>Specialist agents apply the planned changes in dependency order. Each change is isolated and logged individually:</p>
     <ul>
-      <li><strong>CSS/JS agent</strong> — minifies and defers scripts/styles</li>
-      <li><strong>Image agent</strong> — compresses images and adds lazy-load attributes</li>
-      <li><strong>Caching agent</strong> — configures server and browser cache headers</li>
-      <li><strong>CDN agent</strong> — pushes static assets to the configured CDN</li>
-      <li><strong>Database agent</strong> — optimizes slow queries and cleans revisions</li>
-      <li><strong>Security agent</strong> — enforces SSL and sets security headers</li>
-      <li><strong>SEO agent</strong> — repairs meta tags and structured data</li>
+      <li><strong>Plugin agent</strong> — audits and optimizes plugin configuration and load order</li>
+      <li><strong>Provider agent</strong> — applies server-side and hosting-tier optimizations (auto-detects Hostinger via hostinger-agent)</li>
+      <li><strong>Custom agent</strong> — applies custom code-level optimizations</li>
+      <li><strong>Theme Analysis agent</strong> — resolves theme-level performance issues identified in the audit</li>
     </ul>
-    <p>Any agent can be skipped with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-database</code>).</p>
+    <p>The specific optimizations applied depend on the audit findings from the Audit phase. Not all agents run on every site — only those with applicable findings are activated.</p>
+    <p>Any agent can be skipped with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-plugin</code>, <code>/wow --skip-provider</code>, <code>/wow --skip-custom</code>).</p>
 
     <h2 id="step-verify">Step 5 — Verify</h2>
-    <p>The <strong>Testing agent</strong> verifies that all changes are safe:</p>
+    <p>The <strong>Visual Regression agent</strong> verifies that all changes are safe:</p>
     <ul>
       <li>Compares screenshots taken before and after execution (visual regression detection)</li>
-      <li>If a regression is detected, <strong>automatic rollback</strong> triggers immediately — restoring the backup from Step 3</li>
+      <li>If a regression is detected, the Visual Regression agent flags the run and records the regression in the report. You can restore the pre-run backup with <code>/wow rollback</code>.</li>
       <li>Runs a second Lighthouse scan to confirm performance improvements</li>
       <li>Logs a before/after comparison of all Core Web Vitals</li>
     </ul>
