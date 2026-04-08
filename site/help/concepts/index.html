@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Core Concepts — WOW! Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../help.css">
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="nav-logo" href="../../index.html">WOW!</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="../index.html" class="nav-active">Help</a></li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i data-lucide="sun"></i>
+  </button>
+</nav>
+
+<!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
+<div class="breadcrumb">
+  <a href="../index.html">Help</a>
+  <span class="sep">›</span>
+  <span class="current">Core Concepts</span>
+</div>
+
+<!-- ── Article Hero ─────────────────────────────────────────────────── -->
+<div class="article-hero">
+  <h1>Core Concepts</h1>
+  <p>Understand how WOW! works — its 11 specialist agents, 5 optimization domains, and built-in safety model.</p>
+</div>
+
+<!-- ── Doc Layout ───────────────────────────────────────────────────── -->
+<div class="doc-layout">
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar">
+    <input class="nav-search" id="nav-search-input" type="search" placeholder="Search…" autocomplete="off">
+    <div id="nav-search-results"></div>
+    <p class="sidebar-heading">On This Page</p>
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="#what-is-wow">What is WOW?</a></li>
+        <li><a href="#domains">The 5 Domains</a></li>
+        <li><a href="#agents">The 11 Agents</a></li>
+        <li><a href="#backup-rollback">Backup &amp; Rollback</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <main class="doc-content">
+
+    <h2 id="what-is-wow">What is WOW?</h2>
+    <p>WOW! is an <strong>AI-native autonomous agentic performance optimizer</strong> for WordPress. It is not a plugin — it is a WP-CLI package that runs a coordinated pipeline of specialist AI agents, each responsible for a specific optimization domain.</p>
+    <p>You trigger the entire pipeline with a single command:</p>
+    <pre><code>/wow</code></pre>
+    <p>From that point, WOW! audits your site, plans changes, takes a full backup, executes optimizations, verifies results with visual regression testing, and delivers a detailed report — all without further input.</p>
+
+    <h2 id="domains">The 5 Optimization Domains</h2>
+    <p>WOW! organizes all optimization work into five domains. Each domain is handled by one or more specialist agents:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Focus</th>
+          <th>Key Metrics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Performance</strong></td>
+          <td>Core Web Vitals, page speed</td>
+          <td>LCP, CLS, INP, TTFB</td>
+        </tr>
+        <tr>
+          <td><strong>Security</strong></td>
+          <td>SSL configuration, HTTP headers, hardening</td>
+          <td>SSL grade, header score</td>
+        </tr>
+        <tr>
+          <td><strong>SEO</strong></td>
+          <td>Meta tags, structured data, sitemaps</td>
+          <td>Crawlability, schema coverage</td>
+        </tr>
+        <tr>
+          <td><strong>Caching</strong></td>
+          <td>Server, browser, and CDN cache rules</td>
+          <td>Cache hit rate, TTFB</td>
+        </tr>
+        <tr>
+          <td><strong>Image Optimization</strong></td>
+          <td>Compression, modern formats, lazy-load</td>
+          <td>Image byte savings, LCP</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="agents">The 11 Specialist Agents</h2>
+    <p>WOW! deploys 11 agents. Each agent is scoped to a single responsibility, making the system auditable and safe to extend.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>Domain</th>
+          <th>Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Orchestrator</strong></td>
+          <td>All</td>
+          <td>Coordinates the full pipeline; sequences agents in dependency order</td>
+        </tr>
+        <tr>
+          <td><strong>Audit</strong></td>
+          <td>All</td>
+          <td>Runs Lighthouse, captures Core Web Vitals baseline, inventories plugins and theme</td>
+        </tr>
+        <tr>
+          <td><strong>Backup</strong></td>
+          <td>Safety</td>
+          <td>Creates a full site snapshot (database + files) before any change is made</td>
+        </tr>
+        <tr>
+          <td><strong>Caching</strong></td>
+          <td>Caching</td>
+          <td>Configures server-side, browser, and CDN cache headers and rules</td>
+        </tr>
+        <tr>
+          <td><strong>Image</strong></td>
+          <td>Image Optimization</td>
+          <td>Compresses images, converts to WebP/AVIF, adds lazy-loading attributes</td>
+        </tr>
+        <tr>
+          <td><strong>Security</strong></td>
+          <td>Security</td>
+          <td>Enforces SSL, sets security headers (CSP, HSTS, X-Frame-Options), and hardens WP config</td>
+        </tr>
+        <tr>
+          <td><strong>SEO</strong></td>
+          <td>SEO</td>
+          <td>Audits and repairs meta tags, Open Graph, JSON-LD schema, and XML sitemaps</td>
+        </tr>
+        <tr>
+          <td><strong>CSS/JS</strong></td>
+          <td>Performance</td>
+          <td>Minifies, defers, and tree-shakes CSS and JavaScript assets</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>Performance</td>
+          <td>Optimizes slow queries, cleans up post revisions and transients</td>
+        </tr>
+        <tr>
+          <td><strong>CDN</strong></td>
+          <td>Caching / Performance</td>
+          <td>Integrates with CDN providers to push static assets to the edge</td>
+        </tr>
+        <tr>
+          <td><strong>Testing</strong></td>
+          <td>Safety</td>
+          <td>Visual regression detection — screenshots before/after every change</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Any agent can be skipped individually with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-image</code>).</p>
+
+    <h2 id="backup-rollback">Backup &amp; Rollback</h2>
+    <p>WOW! is designed to be <strong>safe by default</strong>. The Backup agent runs before any change is made and creates a full snapshot of your site:</p>
+    <ul>
+      <li>Complete database export</li>
+      <li>Full <code>wp-content/</code> file archive</li>
+      <li>Snapshot stored in <code>wp-content/wow-backups/</code></li>
+    </ul>
+    <p>If the Testing agent detects a visual regression after execution, WOW! automatically triggers a rollback to the snapshot taken in that run. No manual action is required.</p>
+    <p>You can also trigger a manual rollback at any time:</p>
+    <pre><code>/wow --rollback</code></pre>
+    <p>WOW! lists available restore points and prompts for confirmation before restoring.</p>
+
+    <div class="whats-next">
+      <h3>What's Next</h3>
+      <ul>
+        <li><a href="../optimization/index.html"><i data-lucide="git-branch"></i> Optimization Workflow</a></li>
+        <li><a href="../reference/index.html"><i data-lucide="book-open"></i> Reference</a></li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────────────── -->
+<footer class="help-footer">
+  <p>WOW! Help Center</p>
+  <nav>
+    <a href="../../index.html">Home</a>
+    <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+  </nav>
+  <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
+</footer>
+
+<script src="../search.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function() {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('wow-theme', next);
+    lucide.createIcons();
+  });
+
+  lucide.createIcons();
+
+  var navInput = document.getElementById('nav-search-input');
+  if (navInput) {
+    navInput.addEventListener('input', function() {
+      renderNavSearch(navInput.value, '../');
+    });
+  }
+})();
+</script>
+<script>
+(function() {
+  var headings = document.querySelectorAll('.doc-content h2[id]');
+  var links = document.querySelectorAll('.sidebar-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.sidebar-nav a[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(function(h) { observer.observe(h); });
+})();
+</script>
+</body>
+</html>
