@@ -101,7 +101,7 @@
         <tr>
           <td><code>Visual regression detected</code></td>
           <td>A change introduced a visible layout difference</td>
-          <td>Automatic rollback has already run. Check screenshots in <code>wow-logs/</code> to identify the cause. Re-run with <code>--skip-&lt;agent&gt;</code> to isolate the offending agent.</td>
+          <td>WOW! flags the regression; run <code>/wow rollback</code> to restore. Check screenshots in <code>wow-logs/</code> to identify the cause. Re-run with <code>--skip-&lt;agent&gt;</code> to isolate the offending agent.</td>
         </tr>
         <tr>
           <td><code>Agent timeout</code></td>
@@ -123,7 +123,7 @@
 
     <h2 id="manual-rollback">Manual Rollback</h2>
     <p>If you need to revert changes made by WOW!, run:</p>
-    <pre><code>/wow --rollback</code></pre>
+    <pre><code>/wow rollback</code></pre>
     <p>WOW! will list all available restore points with timestamps:</p>
     <pre><code>Available restore points:
   [1] 2026-04-08T12:34:56Z  (latest)
@@ -138,7 +138,7 @@ Enter number to restore (or q to cancel): _</code></pre>
       <li>Flush all caches</li>
     </ol>
     <p>If the CLI is unavailable, you can restore manually from the backup archives stored in:</p>
-    <pre><code>wp-content/wow-backups/&lt;timestamp&gt;/
+    <pre><code>/tmp/.wow/backups/&lt;timestamp&gt;/
   database.sql.gz
   files.tar.gz</code></pre>
     <p>Decompress and import the database with:</p>
