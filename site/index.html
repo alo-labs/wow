@@ -541,6 +541,24 @@ footer .footer-links{display:flex;gap:24px}
   nav .nav-cta{display:none}
   .feature-grid{grid-template-columns:1fr}
 }
+
+/* ── Lucide icon sizing ── */
+[data-lucide] {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  vertical-align: middle;
+}
+.feature-icon [data-lucide]  { width: 1.6rem; height: 1.6rem; }
+.domain-icon [data-lucide]   { width: 1.8rem; height: 1.8rem; }
+.agent-icon [data-lucide]    { width: 1.6rem; height: 1.6rem; }
+.callout-icon [data-lucide]  { width: 2rem;   height: 2rem;   }
+#theme-icon [data-lucide]    { width: 1.1rem; height: 1.1rem; }
 </style>
 </head>
 <body>
@@ -566,7 +584,7 @@ footer .footer-links{display:flex;gap:24px}
         transition:all .2s;flex-shrink:0;
       " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
          onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
-        <span id="theme-icon">&#9728;&#65039;</span>
+        <span id="theme-icon"><i data-lucide="sun"></i></span>
       </button>
       <a href="https://github.com/alo-labs/wow" class="nav-cta" target="_blank">GitHub</a>
     </div>
@@ -605,22 +623,22 @@ footer .footer-links{display:flex;gap:24px}
     </div>
     <div class="feature-grid mt-6">
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(248,113,113,.12);color:var(--red)">&#128528;</div>
+        <div class="feature-icon" style="background:rgba(248,113,113,.12);color:var(--red)"><i data-lucide="gauge"></i></div>
         <h3>Slow Lighthouse Scores</h3>
         <p>Most WordPress sites score 30&ndash;60 on Lighthouse. Themes load render-blocking CSS, plugins inject unoptimized JS, and nobody configured server caching.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)">&#128268;</div>
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)"><i data-lucide="plug"></i></div>
         <h3>Plugin Sprawl</h3>
         <p>50+ plugins, half unused, none configured. Each one adds HTTP requests, database queries, and CSS/JS that slows every page load.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent3)">&#128295;</div>
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent3)"><i data-lucide="wrench"></i></div>
         <h3>Server Blindness</h3>
         <p>OPcache disabled. PHP-FPM on default settings. No gzip. No browser caching headers. The server is doing ten times more work than it needs to.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(8,145,178,.12);color:var(--cyan)">&#128247;</div>
+        <div class="feature-icon" style="background:rgba(8,145,178,.12);color:var(--cyan)"><i data-lucide="camera"></i></div>
         <h3>Fear of Breaking Things</h3>
         <p>Every optimization risks breaking the site. No backups before changes. No way to detect visual regressions. No rollback when things go wrong.</p>
       </div>
@@ -628,7 +646,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#128161;</div>
+        <div class="callout-icon"><i data-lucide="lightbulb"></i></div>
         <p><strong>The root cause:</strong> WordPress performance optimization requires coordinated changes across plugins, server config, theme assets, and content markup. No single tool covers all of it &mdash; and no human wants to do it manually every time. WOW! does.</p>
       </div>
     </div>
@@ -666,7 +684,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#128257;</div>
+        <div class="callout-icon"><i data-lucide="repeat"></i></div>
         <p><strong>The loop is self-terminating.</strong> WOW! stops when the Lighthouse improvement drops below threshold (default 5%) for two consecutive iterations, or when the maximum iteration count is reached. No infinite loops. No wasted work.</p>
       </div>
     </div>
@@ -684,7 +702,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="domain-grid mt-6">
       <div class="domain-card fade-in">
-        <div class="domain-icon">&#128268;</div>
+        <div class="domain-icon"><i data-lucide="plug"></i></div>
         <div class="domain-name">Plugin</div>
         <div class="domain-role">WordPress Plugins</div>
         <div class="domain-desc">Install and configure free optimization plugins. Caching, image optimization, asset minification, database cleanup.</div>
@@ -696,7 +714,7 @@ footer .footer-links{display:flex;gap:24px}
         </ul>
       </div>
       <div class="domain-card fade-in">
-        <div class="domain-icon">&#9881;&#65039;</div>
+        <div class="domain-icon"><i data-lucide="settings"></i></div>
         <div class="domain-name">Provider</div>
         <div class="domain-role">Server &amp; CDN</div>
         <div class="domain-desc">Server-level tuning via SSH. PHP-FPM, OPcache, gzip/brotli compression, CDN configuration, cache headers.</div>
@@ -708,7 +726,7 @@ footer .footer-links{display:flex;gap:24px}
         </ul>
       </div>
       <div class="domain-card fade-in">
-        <div class="domain-icon">&#128221;</div>
+        <div class="domain-icon"><i data-lucide="file-pen"></i></div>
         <div class="domain-name">Custom</div>
         <div class="domain-role">File Edits</div>
         <div class="domain-desc">Direct edits to .htaccess, wp-config.php, and must-use plugins. Browser caching rules, compression, performance constants.</div>
@@ -720,7 +738,7 @@ footer .footer-links{display:flex;gap:24px}
         </ul>
       </div>
       <div class="domain-card fade-in">
-        <div class="domain-icon">&#127912;</div>
+        <div class="domain-icon"><i data-lucide="palette"></i></div>
         <div class="domain-name">Theme</div>
         <div class="domain-role">CSS &amp; Fonts</div>
         <div class="domain-desc">Theme-level performance fixes via mu-plugin overrides. Never edits theme files directly &mdash; safe for theme updates.</div>
@@ -732,7 +750,7 @@ footer .footer-links{display:flex;gap:24px}
         </ul>
       </div>
       <div class="domain-card fade-in">
-        <div class="domain-icon">&#128444;&#65039;</div>
+        <div class="domain-icon"><i data-lucide="image"></i></div>
         <div class="domain-name">Content</div>
         <div class="domain-role">Images &amp; Markup</div>
         <div class="domain-desc">Fix content-level performance issues via WordPress filters. Targets images and markup that cause CLS and slow LCP.</div>
@@ -758,62 +776,62 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="agent-grid mt-6">
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128200;</div>
+        <div class="agent-icon"><i data-lucide="trending-up"></i></div>
         <div class="agent-name">lighthouse-agent</div>
         <div class="agent-desc">Lighthouse audit via MCP. Structured performance scores and Core Web Vitals metrics.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128270;</div>
+        <div class="agent-icon"><i data-lucide="search"></i></div>
         <div class="agent-name">inventory-agent</div>
         <div class="agent-desc">WordPress environment fingerprinting. Plugins, theme, PHP version, server software, hosting provider.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128247;</div>
+        <div class="agent-icon"><i data-lucide="camera"></i></div>
         <div class="agent-name">screenshot-agent</div>
         <div class="agent-desc">Before/after screenshots via Playwright CLI. Visual state capture for regression detection.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#127912;</div>
+        <div class="agent-icon"><i data-lucide="palette"></i></div>
         <div class="agent-name">theme-analysis-agent</div>
         <div class="agent-desc">Render-blocking resources, stylesheet bloat, font loading, DOM size, content image issues.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128203;</div>
+        <div class="agent-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="agent-name">plan-agent</div>
         <div class="agent-desc">Gap analysis and action ranking across 5 domains. Regression-aware planning with suspect tracking.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128230;</div>
+        <div class="agent-icon"><i data-lucide="package"></i></div>
         <div class="agent-name">backup-agent</div>
         <div class="agent-desc">Full WordPress backup via BackWPup + SSH archive + hosting panel snapshot. Before every EXECUTE.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128268;</div>
+        <div class="agent-icon"><i data-lucide="plug"></i></div>
         <div class="agent-name">plugin-agent</div>
         <div class="agent-desc">Install and configure free WP plugins. WP-CLI first, REST API fallback, browser automation last resort.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#9881;&#65039;</div>
+        <div class="agent-icon"><i data-lucide="settings"></i></div>
         <div class="agent-name">provider-agent</div>
         <div class="agent-desc">Server tuning via SSH. OPcache, PHP-FPM, gzip, CDN config. Safety rules enforce config validation.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128221;</div>
+        <div class="agent-icon"><i data-lucide="file-pen"></i></div>
         <div class="agent-name">custom-agent</div>
         <div class="agent-desc">Direct file edits with timestamped backups. .htaccess, wp-config.php, mu-plugins. Also executes theme + content domain actions.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128065;</div>
+        <div class="agent-icon"><i data-lucide="eye"></i></div>
         <div class="agent-name">visual-regression</div>
         <div class="agent-desc">ImageMagick pixel diff + Claude visual judgment. Detects broken layouts, missing elements, color corruption.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#128202;</div>
+        <div class="agent-icon"><i data-lucide="bar-chart-2"></i></div>
         <div class="agent-name">report-agent</div>
         <div class="agent-desc">Styled HTML report + markdown summary. Before/after scores, action log, theme analysis, regression log.</div>
       </div>
       <div class="agent-card fade-in">
-        <div class="agent-icon">&#127968;</div>
+        <div class="agent-icon"><i data-lucide="building"></i></div>
         <div class="agent-name">hostinger-agent</div>
         <div class="agent-desc">Dedicated Hostinger hPanel automation. VPS snapshots, LiteSpeed config, plan-tier detection.</div>
       </div>
@@ -961,7 +979,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#9889;</div>
+        <div class="callout-icon"><i data-lucide="zap"></i></div>
         <p><strong>Dependencies install automatically.</strong><br>
         WOW! installs Playwright, ImageMagick, community performance skills, and the Lighthouse MCP server via <code>scripts/install.sh</code>. Just run <code>/wow</code> and answer the intake questions.</p>
       </div>
@@ -1042,11 +1060,16 @@ footer .footer-links{display:flex;gap:24px}
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
 <!-- ────── SCRIPTS ────── -->
 <script>
 function applyTheme(dark) {
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('theme-icon').textContent = dark ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  var iconName = dark ? 'sun' : 'moon';
+  var span = document.getElementById('theme-icon');
+  span.innerHTML = '<i data-lucide="' + iconName + '"></i>';
+  lucide.createIcons({ el: span });
   localStorage.setItem('wow-theme', dark ? 'dark' : 'light');
 }
 function toggleTheme() {
@@ -1063,6 +1086,8 @@ var observer = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
+
+lucide.createIcons();
 </script>
 
 </body>
