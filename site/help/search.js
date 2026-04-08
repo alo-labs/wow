@@ -20,13 +20,15 @@ const SEARCH_INDEX = [
     title: 'Core Concepts',
     url: '../help/concepts/index.html',
     section: 'Core Concepts',
-    keywords: ['agents', 'orchestrator', 'domains', 'pipeline', 'backup', 'rollback', 'performance', 'security', 'seo', 'caching', 'image'],
-    body: 'WOW uses 11 specialist agents across 5 domains: Performance, Security, SEO, Caching, Image. The Orchestrator coordinates all agents. Full backup before every run.',
+    keywords: ['agents', 'orchestrator', 'domains', 'pipeline', 'backup', 'rollback', 'performance', 'security', 'seo', 'caching', 'image', 'hostinger', 'iteration'],
+    body: 'WOW uses 12 specialist agents across 5 focus areas: Performance, Security, SEO, Caching, Image Optimization. The Orchestrator coordinates all agents and reruns until improvement is below 5%. Full backup to /tmp/.wow/backups/ before every run.',
     sections: [
-      { id: 'what-is-wow',      heading: 'What is WOW?',              excerpt: 'AI-native autonomous agentic performance optimizer' },
-      { id: 'domains',          heading: 'The 5 Optimization Domains', excerpt: 'Performance, Security, SEO, Caching, Image Optimization' },
-      { id: 'agents',           heading: 'The 11 Specialist Agents',   excerpt: 'Orchestrator, Audit, Caching, Image, Security, SEO, CSS/JS, Database, CDN, Testing, Backup' },
-      { id: 'backup-rollback',  heading: 'Backup & Rollback',         excerpt: 'Full snapshot before any change; automatic rollback on regression' }
+      { id: 'what-is-wow',      heading: 'What is WOW?',                    excerpt: 'AI-native autonomous agentic performance optimizer' },
+      { id: 'first-run-setup',  heading: 'First-Run Setup',                 excerpt: 'Site URL, WordPress admin credentials, optional SSH access' },
+      { id: 'domains',          heading: 'The 5 Optimization Focus Areas',  excerpt: 'Performance, Security, SEO, Caching, Image Optimization' },
+      { id: 'agents',           heading: 'The 12 Specialist Agents',        excerpt: 'Orchestrator, Audit, Screenshot, Theme Analysis, Planner, Backup, Plugin, Provider, Hostinger, Custom, Visual Regression, Report' },
+      { id: 'iteration-loop',   heading: 'Iteration Loop',                  excerpt: 'Reruns pipeline until improvement falls below 5%' },
+      { id: 'backup-rollback',  heading: 'Backup & Rollback',               excerpt: 'Full snapshot in /tmp/.wow/backups/ before any change; use /wow rollback to restore' }
     ]
   },
   {
@@ -52,10 +54,10 @@ const SEARCH_INDEX = [
     url: '../help/reference/index.html',
     section: 'Reference',
     keywords: ['agents list', 'commands', 'flags', 'configuration', 'wp-cli', 'dry-run', 'rollback', 'report', 'config', 'wow.config.json'],
-    body: 'Full reference for all 11 agents, CLI flags, and configuration options. wow.config.json schema, WP-CLI integration.',
+    body: 'Full reference for all 12 agents, CLI flags, and configuration options. wow.config.json schema, WP-CLI integration.',
     sections: [
-      { id: 'cli-commands',    heading: 'CLI Commands',      excerpt: '/wow, --dry-run, --rollback, --domain, --report' },
-      { id: 'agent-reference', heading: 'Agent Reference',   excerpt: 'All 11 agents with domain, changes, and --skip flags' },
+      { id: 'cli-commands',    heading: 'CLI Commands',      excerpt: '/wow, --dry-run, rollback, --domain, --report' },
+      { id: 'agent-reference', heading: 'Agent Reference',   excerpt: 'All 12 agents with agent files, responsibilities, and --skip flags' },
       { id: 'configuration',   heading: 'Configuration',     excerpt: 'wow.config.json schema and options' },
       { id: 'wp-cli',          heading: 'WP-CLI Integration', excerpt: 'WP-CLI 2.5+ package manager integration' }
     ]
@@ -70,7 +72,7 @@ const SEARCH_INDEX = [
     sections: [
       { id: 'reading-log',    heading: 'Reading the Log',  excerpt: 'wp-content/wow-logs/ — timestamped JSON per agent' },
       { id: 'common-errors',  heading: 'Common Errors',    excerpt: 'WP-CLI not found, backup failed, visual regression, timeout, permission denied' },
-      { id: 'manual-rollback',heading: 'Manual Rollback',  excerpt: '/wow --rollback or restore from wp-content/wow-backups/' },
+      { id: 'manual-rollback',heading: 'Manual Rollback',  excerpt: '/wow rollback or restore from /tmp/.wow/backups/' },
       { id: 'getting-help',   heading: 'Getting Help',     excerpt: 'GitHub issues with log snippet and /wow --version' }
     ]
   }
