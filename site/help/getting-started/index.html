@@ -70,7 +70,10 @@
 
     <h2 id="install">Install</h2>
     <p>Install WOW! using the WP-CLI package manager:</p>
+    <p><strong>From terminal (WP-CLI):</strong></p>
     <pre><code>wp package install alo-labs/wow</code></pre>
+    <p><strong>From inside a WOW! session:</strong></p>
+    <pre><code>/plugin install alo-labs/wow</code></pre>
     <p>This downloads WOW! from <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">github.com/alo-labs/wow</a> and registers it as a WP-CLI command. The installation is global — once installed, WOW! is available for any WordPress site you manage with WP-CLI.</p>
     <p>To verify the installation:</p>
     <pre><code>wp package list | grep wow</code></pre>
@@ -78,12 +81,19 @@
     <h2 id="first-run">Your First Run</h2>
     <p>Navigate to your WordPress root directory and run:</p>
     <pre><code>/wow</code></pre>
-    <p>WOW! will immediately begin the autonomous optimization pipeline:</p>
+    <p>On first run, WOW! walks you through a short setup before starting the pipeline:</p>
+    <ul>
+      <li><strong>Site URL</strong> — the target WordPress site (e.g., <code>https://yourdomain.com</code>)</li>
+      <li><strong>WordPress admin username and password</strong></li>
+      <li><strong>SSH access</strong> (optional) — enables server-side optimizations</li>
+    </ul>
+    <p>These are stored locally in your WP-CLI config and are never transmitted or written to disk in plaintext.</p>
+    <p>WOW! will then begin the autonomous optimization pipeline:</p>
     <ol>
       <li><strong>Audit</strong> — Lighthouse scan and Core Web Vitals baseline</li>
-      <li><strong>Plan</strong> — Orchestrator builds a prioritized change plan</li>
+      <li><strong>Plan</strong> — Planner agent builds a prioritized change plan</li>
       <li><strong>Backup</strong> — Full site backup (database + files) before any changes</li>
-      <li><strong>Execute</strong> — 11 specialist agents apply changes in dependency order</li>
+      <li><strong>Execute</strong> — 12 specialist agents apply changes in dependency order</li>
       <li><strong>Verify</strong> — Visual regression detection confirms nothing is broken</li>
       <li><strong>Report</strong> — Before/after metrics and a summary of all changes made</li>
     </ol>
