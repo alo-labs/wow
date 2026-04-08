@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WOW! Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="help.css">
+</head>
+<body>
+
+<!-- ── Nav ────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="nav-logo" href="../index.html">WOW!</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="index.html" class="nav-active">Help</a></li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i data-lucide="sun"></i>
+  </button>
+</nav>
+
+<!-- ── Hub Hero ───────────────────────────────────────────────────── -->
+<section class="hub-hero">
+  <h1>WOW! Help Center</h1>
+  <p>Everything you need to install, run, and master WOW! — the autonomous agentic WordPress optimizer.</p>
+  <div class="hub-search-wrap">
+    <input class="hub-search" id="hub-search-input" type="search" placeholder="Search the Help Center…" autocomplete="off">
+    <button class="hub-search-btn" id="hub-search-btn" aria-label="Search">
+      <i data-lucide="search"></i> Search
+    </button>
+  </div>
+  <div id="search-results"></div>
+</section>
+
+<!-- ── Quick Links ────────────────────────────────────────────────── -->
+<section class="quick-links">
+  <h2>Popular Topics</h2>
+  <div class="quick-links-grid">
+    <a href="getting-started/index.html" class="quick-link-item">
+      <i data-lucide="download"></i> Install WOW
+    </a>
+    <a href="getting-started/index.html#first-run" class="quick-link-item">
+      <i data-lucide="terminal"></i> Run /wow
+    </a>
+    <a href="concepts/index.html#agents" class="quick-link-item">
+      <i data-lucide="cpu"></i> How agents work
+    </a>
+    <a href="optimization/index.html" class="quick-link-item">
+      <i data-lucide="git-branch"></i> Optimization pipeline
+    </a>
+    <a href="reference/index.html#cli-commands" class="quick-link-item">
+      <i data-lucide="book-open"></i> CLI reference
+    </a>
+    <a href="troubleshooting/index.html#manual-rollback" class="quick-link-item">
+      <i data-lucide="rotate-ccw"></i> Rollback a change
+    </a>
+    <a href="concepts/index.html#domains" class="quick-link-item">
+      <i data-lucide="shield-check"></i> Visual regression
+    </a>
+    <a href="reference/index.html#agent-reference" class="quick-link-item">
+      <i data-lucide="layout-grid"></i> All 11 agents
+    </a>
+  </div>
+</section>
+
+<!-- ── Hub Cards ─────────────────────────────────────────────────── -->
+<section class="hub-cards-section section-alt">
+  <h2>Browse the Docs</h2>
+  <div class="hub-cards">
+
+    <a href="getting-started/index.html" class="hub-card">
+      <span class="card-badge"><span class="badge badge-green">New</span></span>
+      <div class="card-icon"><i data-lucide="rocket"></i></div>
+      <h3>Getting Started</h3>
+      <p>Install and run your first optimization in under 2 minutes.</p>
+    </a>
+
+    <a href="concepts/index.html" class="hub-card">
+      <span class="card-badge"><span class="badge badge-grey">Core Concepts</span></span>
+      <div class="card-icon"><i data-lucide="layers"></i></div>
+      <h3>Core Concepts</h3>
+      <p>Understand the 11 agents and 5 optimization domains.</p>
+    </a>
+
+    <a href="optimization/index.html" class="hub-card">
+      <span class="card-badge"><span class="badge badge-grey">Optimization Workflow</span></span>
+      <div class="card-icon"><i data-lucide="git-branch"></i></div>
+      <h3>Optimization Workflow</h3>
+      <p>How WOW audits, plans, executes, and verifies every change.</p>
+    </a>
+
+    <a href="reference/index.html" class="hub-card">
+      <span class="card-badge"><span class="badge badge-amber">Reference</span></span>
+      <div class="card-icon"><i data-lucide="book-open"></i></div>
+      <h3>Reference</h3>
+      <p>CLI flags, agent configuration, and WP-CLI commands.</p>
+    </a>
+
+    <a href="troubleshooting/index.html" class="hub-card">
+      <span class="card-badge"><span class="badge badge-red">Troubleshooting</span></span>
+      <div class="card-icon"><i data-lucide="life-buoy"></i></div>
+      <h3>Troubleshooting</h3>
+      <p>Diagnose errors, read logs, and roll back safely.</p>
+    </a>
+
+  </div>
+</section>
+
+<!-- ── Bottom Callout ─────────────────────────────────────────────── -->
+<section class="bottom-callout">
+  <h2>Ready to optimize?</h2>
+  <p>One command. Eleven agents. Zero guesswork.</p>
+  <a href="getting-started/index.html" class="callout-btn">
+    <i data-lucide="rocket"></i> Get Started
+  </a>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────── -->
+<footer class="help-footer">
+  <p>WOW! Help Center</p>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+  </nav>
+  <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
+</footer>
+
+<script src="search.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function() {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('wow-theme', next);
+    lucide.createIcons();
+  });
+
+  lucide.createIcons();
+
+  // Hub search
+  var input = document.getElementById('hub-search-input');
+  var resultsEl = document.getElementById('search-results');
+
+  function doSearch() {
+    var q = input.value.trim();
+    resultsEl.innerHTML = '';
+    if (!q) return;
+    var results = searchHelp(q);
+    results.slice(0, 6).forEach(function(r) {
+      var a = document.createElement('a');
+      a.className = 'search-result-item';
+      a.href = r.url;
+      a.innerHTML = '<strong>' + r.title + '</strong>' + r.body.substring(0, 100) + '…';
+      resultsEl.appendChild(a);
+    });
+    if (results.length === 0) {
+      resultsEl.innerHTML = '<p style="text-align:center;color:var(--text-dim);font-size:.875rem;padding:.75rem">No results found for "' + q + '"</p>';
+    }
+  }
+
+  input.addEventListener('input', doSearch);
+  document.getElementById('hub-search-btn').addEventListener('click', doSearch);
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
+})();
+</script>
+</body>
+</html>
