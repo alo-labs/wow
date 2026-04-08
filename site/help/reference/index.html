@@ -34,7 +34,7 @@
 <!-- ── Article Hero ─────────────────────────────────────────────────── -->
 <div class="article-hero">
   <h1>Reference</h1>
-  <p>Complete CLI command reference, all 11 agent flags, configuration schema, and WP-CLI integration details.</p>
+  <p>Complete CLI command reference, all 12 agent flags, configuration schema, and WP-CLI integration details.</p>
 </div>
 
 <!-- ── Doc Layout ───────────────────────────────────────────────────── -->
@@ -64,24 +64,26 @@
 /wow                               # Run full optimization pipeline
 /wow --dry-run                     # Audit only — no changes made
 /wow --domain=example.com          # Target a specific domain
-/wow --rollback                    # Revert to last backup
+/wow rollback                      # Revert to last backup
 /wow --report                      # Display last run report
 /wow --version                     # Show installed WOW! version
-/wow --skip-image                  # Run pipeline skipping Image agent
-/wow --skip-database               # Run pipeline skipping Database agent</code></pre>
+/wow --skip-plugin                 # Run pipeline skipping Plugin agent
+/wow --skip-provider               # Run pipeline skipping Provider agent
+/wow --skip-custom                 # Run pipeline skipping Custom agent
+/wow --skip-backup                 # Run pipeline skipping Backup agent (not recommended)</code></pre>
 
     <h3>Global Flags</h3>
     <table>
       <thead>
-        <tr><th>Flag</th><th>Description</th></tr>
+        <tr><th>Flag / Subcommand</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr><td><code>--dry-run</code></td><td>Audit and plan only; make no changes</td></tr>
         <tr><td><code>--domain=&lt;url&gt;</code></td><td>Override the target domain for Lighthouse scans</td></tr>
-        <tr><td><code>--rollback</code></td><td>List restore points and revert to selected snapshot</td></tr>
+        <tr><td><code>rollback</code></td><td>List restore points and revert to selected snapshot</td></tr>
         <tr><td><code>--report</code></td><td>Print the last run's HTML/JSON report path</td></tr>
         <tr><td><code>--version</code></td><td>Print installed WOW! version</td></tr>
-        <tr><td><code>--skip-&lt;agent&gt;</code></td><td>Skip a named agent (e.g., <code>--skip-image</code>, <code>--skip-seo</code>)</td></tr>
+        <tr><td><code>--skip-&lt;agent&gt;</code></td><td>Skip a named agent (e.g., <code>--skip-plugin</code>, <code>--skip-provider</code>)</td></tr>
         <tr><td><code>--config=&lt;path&gt;</code></td><td>Path to an alternate <code>wow.config.json</code></td></tr>
       </tbody>
     </table>
@@ -92,77 +94,83 @@
       <thead>
         <tr>
           <th>Agent</th>
-          <th>Domain</th>
-          <th>What it changes</th>
+          <th>Agent File(s)</th>
+          <th>What it does</th>
           <th>Skip flag</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Orchestrator</strong></td>
-          <td>All</td>
+          <td>(CLAUDE.md orchestration loop)</td>
           <td>Pipeline sequencing only — cannot be skipped</td>
           <td>—</td>
         </tr>
         <tr>
           <td><strong>Audit</strong></td>
-          <td>All</td>
-          <td>Lighthouse scan, Core Web Vitals baseline, inventory</td>
+          <td>lighthouse-agent + inventory-agent</td>
+          <td>Lighthouse scan, Core Web Vitals baseline, full plugin/theme/asset inventory</td>
           <td><code>--skip-audit</code></td>
         </tr>
         <tr>
+          <td><strong>Screenshot</strong></td>
+          <td>screenshot-agent</td>
+          <td>Captures before/after screenshots for regression comparison</td>
+          <td><code>--skip-screenshot</code></td>
+        </tr>
+        <tr>
+          <td><strong>Theme Analysis</strong></td>
+          <td>theme-analysis-agent</td>
+          <td>Detects theme-level performance and compatibility issues</td>
+          <td><code>--skip-theme</code></td>
+        </tr>
+        <tr>
+          <td><strong>Planner</strong></td>
+          <td>plan-agent</td>
+          <td>Generates the prioritized change plan from audit findings</td>
+          <td><code>--skip-plan</code></td>
+        </tr>
+        <tr>
           <td><strong>Backup</strong></td>
-          <td>Safety</td>
-          <td>Full DB + files snapshot to <code>wp-content/wow-backups/</code></td>
+          <td>backup-agent</td>
+          <td>Full DB + files snapshot to <code>/tmp/.wow/backups/</code> before any changes</td>
           <td><code>--skip-backup</code> (not recommended)</td>
         </tr>
         <tr>
-          <td><strong>Caching</strong></td>
-          <td>Caching</td>
-          <td>Server headers, browser cache rules, object cache config</td>
-          <td><code>--skip-caching</code></td>
+          <td><strong>Plugin</strong></td>
+          <td>plugin-agent</td>
+          <td>Audits and optimizes plugin configuration and load order</td>
+          <td><code>--skip-plugin</code></td>
         </tr>
         <tr>
-          <td><strong>Image</strong></td>
-          <td>Image Optimization</td>
-          <td>Compress images, convert to WebP/AVIF, add lazy-load</td>
-          <td><code>--skip-image</code></td>
+          <td><strong>Provider</strong></td>
+          <td>provider-agent</td>
+          <td>Applies server-side and hosting-tier optimizations</td>
+          <td><code>--skip-provider</code></td>
         </tr>
         <tr>
-          <td><strong>Security</strong></td>
-          <td>Security</td>
-          <td>SSL enforcement, CSP/HSTS/X-Frame-Options headers, WP hardening</td>
-          <td><code>--skip-security</code></td>
+          <td><strong>Hostinger</strong></td>
+          <td>hostinger-agent</td>
+          <td>Hostinger-specific hPanel tuning — invoked by provider-agent on Hostinger environments</td>
+          <td><code>--skip-hostinger</code></td>
         </tr>
         <tr>
-          <td><strong>SEO</strong></td>
-          <td>SEO</td>
-          <td>Meta tags, Open Graph, JSON-LD schema, XML sitemap</td>
-          <td><code>--skip-seo</code></td>
+          <td><strong>Custom</strong></td>
+          <td>custom-agent</td>
+          <td>Applies custom code-level optimizations (theme/content via mu-plugin)</td>
+          <td><code>--skip-custom</code></td>
         </tr>
         <tr>
-          <td><strong>CSS/JS</strong></td>
-          <td>Performance</td>
-          <td>Minify, defer, and tree-shake CSS and JavaScript</td>
-          <td><code>--skip-cssjs</code></td>
+          <td><strong>Visual Regression</strong></td>
+          <td>visual-regression-agent</td>
+          <td>Compares before/after screenshots; flags regressions for review</td>
+          <td><code>--skip-visual-regression</code> (not recommended)</td>
         </tr>
         <tr>
-          <td><strong>Database</strong></td>
-          <td>Performance</td>
-          <td>Query optimization, post revision cleanup, transient purge</td>
-          <td><code>--skip-database</code></td>
-        </tr>
-        <tr>
-          <td><strong>CDN</strong></td>
-          <td>Caching / Performance</td>
-          <td>Push static assets to configured CDN provider</td>
-          <td><code>--skip-cdn</code></td>
-        </tr>
-        <tr>
-          <td><strong>Testing</strong></td>
-          <td>Safety</td>
-          <td>Visual regression screenshots before/after execution</td>
-          <td><code>--skip-testing</code> (not recommended)</td>
+          <td><strong>Report</strong></td>
+          <td>report-agent</td>
+          <td>Generates the final styled HTML + markdown performance report</td>
+          <td><code>--skip-report</code></td>
         </tr>
       </tbody>
     </table>
@@ -172,27 +180,23 @@
     <pre><code>{
   "domains": ["example.com"],
   "agents": {
-    "image": {
-      "quality": 85,
-      "formats": ["webp", "avif"]
+    "plugin": {
+      "skip_deactivate": []
     },
-    "caching": {
-      "browser_ttl": 31536000
+    "provider": {
+      "hostinger_autopilot": true
     },
-    "cdn": {
-      "provider": "cloudflare",
-      "zone_id": "YOUR_ZONE_ID"
+    "backup": {
+      "offload": false,
+      "offload_path": "/mnt/backups"
     }
-  },
-  "backup": {
-    "offload": false,
-    "offload_path": "/mnt/backups"
   },
   "report": {
     "format": "html",
     "output_dir": "wp-content/wow-reports"
   }
 }</code></pre>
+    <p class="callout-note"><strong>Note:</strong> The <code>domains</code> key controls which URLs are targeted during Lighthouse scans. It does not control WOW!'s internal execution agents.</p>
 
     <h3>Configuration Fields</h3>
     <table>
@@ -200,10 +204,10 @@
         <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>domains</code></td><td>string[]</td><td>auto-detected</td><td>Target domains for Lighthouse scans</td></tr>
-        <tr><td><code>agents.image.quality</code></td><td>number</td><td><code>82</code></td><td>JPEG/WebP compression quality (1–100)</td></tr>
-        <tr><td><code>agents.image.formats</code></td><td>string[]</td><td><code>["webp"]</code></td><td>Output formats (<code>webp</code>, <code>avif</code>)</td></tr>
-        <tr><td><code>backup.offload</code></td><td>boolean</td><td><code>false</code></td><td>Copy backup to remote path after creation</td></tr>
+        <tr><td><code>domains</code></td><td>string[]</td><td>auto-detected</td><td>Target URLs for Lighthouse scans (not execution domains)</td></tr>
+        <tr><td><code>agents.backup.offload</code></td><td>boolean</td><td><code>false</code></td><td>Copy backup to remote path after creation</td></tr>
+        <tr><td><code>agents.backup.offload_path</code></td><td>string</td><td>—</td><td>Remote path for backup offload</td></tr>
+        <tr><td><code>agents.provider.hostinger_autopilot</code></td><td>boolean</td><td><code>true</code></td><td>Auto-invoke hostinger-agent when Hostinger environment detected</td></tr>
         <tr><td><code>report.format</code></td><td>string</td><td><code>"html"</code></td><td>Report output format: <code>html</code> or <code>json</code></td></tr>
       </tbody>
     </table>
@@ -217,7 +221,7 @@
       <li>Remove with <code>wp package uninstall alo-labs/wow</code></li>
       <li>Compatible with any WP-CLI setup (local, remote SSH, Trellis, Bedrock, etc.)</li>
     </ul>
-    <p>WOW! does not modify WordPress core files. All changes are reversible via <code>/wow --rollback</code>.</p>
+    <p>WOW! does not modify WordPress core files. All changes are reversible via <code>/wow rollback</code>.</p>
 
     <div class="whats-next">
       <h3>Continue Learning</h3>
