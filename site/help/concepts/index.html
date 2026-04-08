@@ -34,7 +34,7 @@
 <!-- ── Article Hero ─────────────────────────────────────────────────── -->
 <div class="article-hero">
   <h1>Core Concepts</h1>
-  <p>Understand how WOW! works — its 11 specialist agents, 5 optimization domains, and built-in safety model.</p>
+  <p>Understand how WOW! works — its 12 specialist agents, 5 optimization focus areas, and built-in safety model.</p>
 </div>
 
 <!-- ── Doc Layout ───────────────────────────────────────────────────── -->
@@ -48,8 +48,10 @@
     <nav>
       <ul class="sidebar-nav">
         <li><a href="#what-is-wow">What is WOW?</a></li>
-        <li><a href="#domains">The 5 Domains</a></li>
-        <li><a href="#agents">The 11 Agents</a></li>
+        <li><a href="#first-run-setup">First-Run Setup</a></li>
+        <li><a href="#domains">The 5 Focus Areas</a></li>
+        <li><a href="#agents">The 12 Specialist Agents</a></li>
+        <li><a href="#iteration-loop">Iteration Loop</a></li>
         <li><a href="#backup-rollback">Backup &amp; Rollback</a></li>
       </ul>
     </nav>
@@ -64,12 +66,21 @@
     <pre><code>/wow</code></pre>
     <p>From that point, WOW! audits your site, plans changes, takes a full backup, executes optimizations, verifies results with visual regression testing, and delivers a detailed report — all without further input.</p>
 
-    <h2 id="domains">The 5 Optimization Domains</h2>
-    <p>WOW! organizes all optimization work into five domains. Each domain is handled by one or more specialist agents:</p>
+    <h2 id="first-run-setup">First-Run Setup</h2>
+    <p>On first run, WOW! walks you through a short setup before starting the pipeline:</p>
+    <ul>
+      <li><strong>Site URL</strong> — the target WordPress site (e.g., <code>https://yourdomain.com</code>)</li>
+      <li><strong>WordPress admin credentials</strong> — username and password for the WP admin account</li>
+      <li><strong>SSH access</strong> (optional) — enables server-side optimizations such as provider-level tuning</li>
+    </ul>
+    <p>These are stored locally in your WP-CLI config and are never transmitted or written to disk in plaintext. Subsequent runs reuse the saved credentials automatically.</p>
+
+    <h2 id="domains">The 5 Optimization Focus Areas</h2>
+    <p>WOW! organizes optimization work into five user-facing focus areas. Each focus area maps to one or more specialist agents in the internal execution model (Plugin, Provider, Custom, Theme, Content). These focus areas reflect what gets improved — the agents handle how.</p>
     <table>
       <thead>
         <tr>
-          <th>Domain</th>
+          <th>Focus Area</th>
           <th>Focus</th>
           <th>Key Metrics</th>
         </tr>
@@ -103,86 +114,91 @@
       </tbody>
     </table>
 
-    <h2 id="agents">The 11 Specialist Agents</h2>
-    <p>WOW! deploys 11 agents. Each agent is scoped to a single responsibility, making the system auditable and safe to extend.</p>
+    <h2 id="agents">The 12 Specialist Agents</h2>
+    <p>WOW! deploys 12 agents. Each agent is scoped to a single responsibility, making the system auditable and safe to extend.</p>
     <table>
       <thead>
         <tr>
-          <th>Agent</th>
-          <th>Domain</th>
+          <th>Friendly Name</th>
+          <th>Actual Agent File(s)</th>
           <th>Responsibility</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Orchestrator</strong></td>
-          <td>All</td>
-          <td>Coordinates the full pipeline; sequences agents in dependency order</td>
+          <td>(CLAUDE.md orchestration loop)</td>
+          <td>Sequences all agents; reruns the full pipeline until improvement falls below 5%</td>
         </tr>
         <tr>
           <td><strong>Audit</strong></td>
-          <td>All</td>
-          <td>Runs Lighthouse, captures Core Web Vitals baseline, inventories plugins and theme</td>
+          <td>lighthouse-agent + inventory-agent</td>
+          <td>Baseline performance scan + full plugin/theme/asset inventory</td>
+        </tr>
+        <tr>
+          <td><strong>Screenshot / Visual State</strong></td>
+          <td>screenshot-agent</td>
+          <td>Captures before/after screenshots for regression comparison</td>
+        </tr>
+        <tr>
+          <td><strong>Theme Analysis</strong></td>
+          <td>theme-analysis-agent</td>
+          <td>Detects theme-level performance and compatibility issues</td>
+        </tr>
+        <tr>
+          <td><strong>Planner</strong></td>
+          <td>plan-agent</td>
+          <td>Generates the prioritized change plan from audit findings</td>
         </tr>
         <tr>
           <td><strong>Backup</strong></td>
-          <td>Safety</td>
-          <td>Creates a full site snapshot (database + files) before any change is made</td>
+          <td>backup-agent</td>
+          <td>Full DB + files snapshot before any changes</td>
         </tr>
         <tr>
-          <td><strong>Caching</strong></td>
-          <td>Caching</td>
-          <td>Configures server-side, browser, and CDN cache headers and rules</td>
+          <td><strong>Plugin</strong></td>
+          <td>plugin-agent</td>
+          <td>Audits and optimizes plugin configuration and load order</td>
         </tr>
         <tr>
-          <td><strong>Image</strong></td>
-          <td>Image Optimization</td>
-          <td>Compresses images, converts to WebP/AVIF, adds lazy-loading attributes</td>
+          <td><strong>Provider (incl. Hostinger)</strong></td>
+          <td>provider-agent + hostinger-agent</td>
+          <td>Applies server-side and hosting-tier optimizations; Hostinger-specific tuning via hostinger-agent</td>
         </tr>
         <tr>
-          <td><strong>Security</strong></td>
-          <td>Security</td>
-          <td>Enforces SSL, sets security headers (CSP, HSTS, X-Frame-Options), and hardens WP config</td>
+          <td><strong>Custom</strong></td>
+          <td>custom-agent</td>
+          <td>Applies custom code-level optimizations</td>
         </tr>
         <tr>
-          <td><strong>SEO</strong></td>
-          <td>SEO</td>
-          <td>Audits and repairs meta tags, Open Graph, JSON-LD schema, and XML sitemaps</td>
+          <td><strong>Visual Regression</strong></td>
+          <td>visual-regression-agent</td>
+          <td>Compares before/after screenshots; flags regressions for review</td>
         </tr>
         <tr>
-          <td><strong>CSS/JS</strong></td>
-          <td>Performance</td>
-          <td>Minifies, defers, and tree-shakes CSS and JavaScript assets</td>
-        </tr>
-        <tr>
-          <td><strong>Database</strong></td>
-          <td>Performance</td>
-          <td>Optimizes slow queries, cleans up post revisions and transients</td>
-        </tr>
-        <tr>
-          <td><strong>CDN</strong></td>
-          <td>Caching / Performance</td>
-          <td>Integrates with CDN providers to push static assets to the edge</td>
-        </tr>
-        <tr>
-          <td><strong>Testing</strong></td>
-          <td>Safety</td>
-          <td>Visual regression detection — screenshots before/after every change</td>
+          <td><strong>Report</strong></td>
+          <td>report-agent</td>
+          <td>Generates the final HTML performance report</td>
         </tr>
       </tbody>
     </table>
-    <p>Any agent can be skipped individually with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-image</code>).</p>
+    <p class="callout-note"><strong>Note:</strong> hostinger-agent is a specialized sub-agent of the Provider tier, invoked automatically when a Hostinger environment is detected.</p>
+    <p>Any agent can be skipped individually with <code>--skip-&lt;agent&gt;</code> (e.g., <code>/wow --skip-plugin</code>).</p>
+
+    <h2 id="iteration-loop">Iteration Loop</h2>
+    <p>WOW! does not run the pipeline just once. After each full cycle (Audit → Plan → Execute → Verify → Report), it measures the performance improvement achieved. If the improvement is 5% or greater, WOW! automatically begins a new cycle — re-auditing the site and generating a fresh plan based on the updated state. This loop continues until the measured improvement between cycles falls below 5%, or until no further actionable findings remain.</p>
+    <p>This compounding approach ensures that second- and third-order gains are captured without over-optimizing.</p>
 
     <h2 id="backup-rollback">Backup &amp; Rollback</h2>
     <p>WOW! is designed to be <strong>safe by default</strong>. The Backup agent runs before any change is made and creates a full snapshot of your site:</p>
     <ul>
       <li>Complete database export</li>
       <li>Full <code>wp-content/</code> file archive</li>
-      <li>Snapshot stored in <code>wp-content/wow-backups/</code></li>
+      <li>Snapshot stored in <code>/tmp/.wow/backups/</code></li>
     </ul>
-    <p>If the Testing agent detects a visual regression after execution, WOW! automatically triggers a rollback to the snapshot taken in that run. No manual action is required.</p>
+    <p>If the Visual Regression agent detects a regression after execution, it flags the run and records the regression in the report. You can then restore the pre-run backup manually with <code>/wow rollback</code>.</p>
     <p>You can also trigger a manual rollback at any time:</p>
-    <pre><code>/wow --rollback</code></pre>
+    <pre><code>/wow rollback</code></pre>
     <p>WOW! lists available restore points and prompts for confirmation before restoring.</p>
 
     <div class="whats-next">
