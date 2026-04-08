@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troubleshooting — WOW! Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../help.css">
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="nav-logo" href="../../index.html">WOW!</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="../index.html" class="nav-active">Help</a></li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i data-lucide="sun"></i>
+  </button>
+</nav>
+
+<!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
+<div class="breadcrumb">
+  <a href="../index.html">Help</a>
+  <span class="sep">›</span>
+  <span class="current">Troubleshooting</span>
+</div>
+
+<!-- ── Article Hero ─────────────────────────────────────────────────── -->
+<div class="article-hero">
+  <h1>Troubleshooting</h1>
+  <p>Diagnose errors, read logs, and safely roll back any change WOW! made.</p>
+</div>
+
+<!-- ── Doc Layout ───────────────────────────────────────────────────── -->
+<div class="doc-layout">
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar">
+    <input class="nav-search" id="nav-search-input" type="search" placeholder="Search…" autocomplete="off">
+    <div id="nav-search-results"></div>
+    <p class="sidebar-heading">On This Page</p>
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="#reading-log">Reading the Log</a></li>
+        <li><a href="#common-errors">Common Errors</a></li>
+        <li><a href="#manual-rollback">Manual Rollback</a></li>
+        <li><a href="#getting-help">Getting Help</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <main class="doc-content">
+
+    <h2 id="reading-log">Reading the Log</h2>
+    <p>WOW! outputs a structured log during every run. Logs are stored in:</p>
+    <pre><code>wp-content/wow-logs/</code></pre>
+    <p>Each run creates a timestamped directory containing:</p>
+    <ul>
+      <li><code>run.log</code> — human-readable summary of each pipeline step</li>
+      <li><code>agents/*.json</code> — structured JSON output per agent (timestamped entries)</li>
+      <li><code>screenshots/</code> — before/after visual regression images</li>
+      <li><code>report.html</code> / <code>report.json</code> — the final report</li>
+    </ul>
+    <p>Each JSON log entry follows this format:</p>
+    <pre><code>{
+  "ts": "2026-04-08T12:34:56Z",
+  "agent": "image",
+  "level": "info",
+  "message": "Compressed 42 images — saved 1.4 MB",
+  "data": { "count": 42, "saved_bytes": 1468006 }
+}</code></pre>
+    <p>Use <code>level</code> to filter for warnings (<code>"warn"</code>) and errors (<code>"error"</code>) when diagnosing a failed run.</p>
+
+    <h2 id="common-errors">Common Errors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Error</th>
+          <th>Cause</th>
+          <th>Resolution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>WP-CLI not found</code></td>
+          <td>WP-CLI is not installed or not in <code>$PATH</code></td>
+          <td>Install WP-CLI 2.5+ from <a href="https://wp-cli.org/" target="_blank" rel="noopener">wp-cli.org</a> and ensure it is executable</td>
+        </tr>
+        <tr>
+          <td><code>Backup failed</code></td>
+          <td>Insufficient disk space or incorrect file permissions on <code>wp-content/</code></td>
+          <td>Free disk space and ensure the webserver user has write access to <code>wp-content/</code></td>
+        </tr>
+        <tr>
+          <td><code>Visual regression detected</code></td>
+          <td>A change introduced a visible layout difference</td>
+          <td>Automatic rollback has already run. Check screenshots in <code>wow-logs/</code> to identify the cause. Re-run with <code>--skip-&lt;agent&gt;</code> to isolate the offending agent.</td>
+        </tr>
+        <tr>
+          <td><code>Agent timeout</code></td>
+          <td>Network latency or server load caused an agent to exceed its time limit</td>
+          <td>Re-run with <code>--skip-&lt;agent&gt;</code> to isolate the slow agent. Check server load and network connectivity.</td>
+        </tr>
+        <tr>
+          <td><code>Permission denied</code></td>
+          <td>WP-CLI is running as a different user than the webserver</td>
+          <td>Run WP-CLI as the webserver user (e.g., <code>sudo -u www-data wp ...</code>) or adjust file ownership on <code>wp-content/</code></td>
+        </tr>
+        <tr>
+          <td><code>Lighthouse unreachable</code></td>
+          <td>The site URL is not publicly accessible from the server</td>
+          <td>Use <code>--domain=https://your-public-url.com</code> or ensure the server can reach itself over HTTP</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="manual-rollback">Manual Rollback</h2>
+    <p>If you need to revert changes made by WOW!, run:</p>
+    <pre><code>/wow --rollback</code></pre>
+    <p>WOW! will list all available restore points with timestamps:</p>
+    <pre><code>Available restore points:
+  [1] 2026-04-08T12:34:56Z  (latest)
+  [2] 2026-04-07T09:12:00Z
+  [3] 2026-04-06T18:45:33Z
+
+Enter number to restore (or q to cancel): _</code></pre>
+    <p>Select a restore point and confirm. WOW! will:</p>
+    <ol>
+      <li>Restore the database from the selected snapshot</li>
+      <li>Restore <code>wp-content/</code> files from the archive</li>
+      <li>Flush all caches</li>
+    </ol>
+    <p>If the CLI is unavailable, you can restore manually from the backup archives stored in:</p>
+    <pre><code>wp-content/wow-backups/&lt;timestamp&gt;/
+  database.sql.gz
+  files.tar.gz</code></pre>
+    <p>Decompress and import the database with:</p>
+    <pre><code>gunzip -c database.sql.gz | wp db import -</code></pre>
+
+    <h2 id="getting-help">Getting Help</h2>
+    <p>If you cannot resolve an issue using the steps above, open a GitHub issue:</p>
+    <p><a href="https://github.com/alo-labs/wow/issues" target="_blank" rel="noopener">github.com/alo-labs/wow/issues</a></p>
+    <p>Please include the following in your report:</p>
+    <ul>
+      <li>The full error message from the console output</li>
+      <li>The relevant section from <code>wp-content/wow-logs/&lt;run&gt;/run.log</code></li>
+      <li>Your WOW! version: <code>/wow --version</code></li>
+      <li>Your WP-CLI version: <code>wp --version</code></li>
+      <li>Your PHP version: <code>php --version</code></li>
+      <li>WordPress version: <code>wp core version</code></li>
+    </ul>
+    <p>The more context you provide, the faster the issue can be diagnosed and resolved.</p>
+
+  </main>
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────────────── -->
+<footer class="help-footer">
+  <p>WOW! Help Center</p>
+  <nav>
+    <a href="../../index.html">Home</a>
+    <a href="https://github.com/alo-labs/wow" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/alo-labs/wow/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+  </nav>
+  <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
+</footer>
+
+<script src="../search.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function() {
+  var root = document.documentElement;
+  var saved = localStorage.getItem('wow-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('wow-theme', next);
+    lucide.createIcons();
+  });
+
+  lucide.createIcons();
+
+  var navInput = document.getElementById('nav-search-input');
+  if (navInput) {
+    navInput.addEventListener('input', function() {
+      renderNavSearch(navInput.value, '../');
+    });
+  }
+})();
+</script>
+<script>
+(function() {
+  var headings = document.querySelectorAll('.doc-content h2[id]');
+  var links = document.querySelectorAll('.sidebar-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.sidebar-nav a[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(function(h) { observer.observe(h); });
+})();
+</script>
+</body>
+</html>
