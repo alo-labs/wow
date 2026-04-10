@@ -22,6 +22,9 @@
   <button id="theme-toggle" aria-label="Toggle theme">
     <i data-lucide="sun"></i>
   </button>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
@@ -39,6 +42,19 @@
 
 <!-- ── Doc Layout ───────────────────────────────────────────────────── -->
 <div class="doc-layout">
+
+  <!-- Mobile TOC -->
+  <div class="mobile-toc">
+    <details>
+      <summary>On This Page</summary>
+      <nav>
+        <a href="#reading-log">Reading the Log</a>
+        <a href="#common-errors">Common Errors</a>
+        <a href="#manual-rollback">Manual Rollback</a>
+        <a href="#getting-help">Getting Help</a>
+      </nav>
+    </details>
+  </div>
 
   <!-- Sidebar -->
   <aside class="doc-sidebar">
@@ -172,6 +188,13 @@ Enter number to restore (or q to cancel): _</code></pre>
   <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
 </footer>
 
+<script>
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+  }
+</script>
 <script src="../search.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>

@@ -22,6 +22,9 @@
   <button id="theme-toggle" aria-label="Toggle theme">
     <i data-lucide="sun"></i>
   </button>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- ── Breadcrumb ───────────────────────────────────────────────────── -->
@@ -39,6 +42,21 @@
 
 <!-- ── Doc Layout ───────────────────────────────────────────────────── -->
 <div class="doc-layout">
+
+  <!-- Mobile TOC -->
+  <div class="mobile-toc">
+    <details>
+      <summary>On This Page</summary>
+      <nav>
+        <a href="#what-is-wow">What is WOW?</a>
+        <a href="#first-run-setup">First-Run Setup</a>
+        <a href="#domains">The 5 Focus Areas</a>
+        <a href="#agents">The 12 Specialist Agents</a>
+        <a href="#iteration-loop">Iteration Loop</a>
+        <a href="#backup-rollback">Backup &amp; Rollback</a>
+      </nav>
+    </details>
+  </div>
 
   <!-- Sidebar -->
   <aside class="doc-sidebar">
@@ -223,6 +241,13 @@
   <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
 </footer>
 
+<script>
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+  }
+</script>
 <script src="../search.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>

@@ -22,6 +22,9 @@
   <button id="theme-toggle" aria-label="Toggle theme">
     <i data-lucide="sun"></i>
   </button>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- ── Hub Hero ───────────────────────────────────────────────────── -->
@@ -31,7 +34,7 @@
   <div class="hub-search-wrap">
     <input class="hub-search" id="hub-search-input" type="search" placeholder="Search the Help Center…" autocomplete="off">
     <button class="hub-search-btn" id="hub-search-btn" aria-label="Search">
-      <i data-lucide="search"></i> Search
+      <i data-lucide="search"></i> <span class="btn-label">Search</span>
     </button>
   </div>
   <div id="search-results"></div>
@@ -131,6 +134,13 @@
   <p class="footer-copy">© <span class="alo-brand">Ālo Labs</span>. Built with WOW!</p>
 </footer>
 
+<script>
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+  }
+</script>
 <script src="search.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
