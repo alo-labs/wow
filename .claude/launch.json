@@ -4,7 +4,7 @@
     {
       "name": "wow-site",
       "runtimeExecutable": "/opt/homebrew/bin/node",
-      "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),path=require('path');const SITE=path.resolve('/Users/shafqat/Documents/Projects/CodersTrust/wordpress-optimization/site');http.createServer((req,res)=>{const f=path.join(SITE,req.url==='/'?'index.html':req.url);fs.readFile(f,(e,d)=>{if(e){res.writeHead(404);res.end();}else{const ext=path.extname(f);const ct=ext==='.html'?'text/html':ext==='.css'?'text/css':ext==='.js'?'text/javascript':'application/octet-stream';res.writeHead(200,{'Content-Type':ct});res.end(d);}});}).listen(3456,()=>console.log('Serving on http://localhost:3456'));"],
+      "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),path=require('path');const SITE=path.resolve('/Users/shafqat/Documents/Projects/CodersTrust/wordpress-optimization/site');http.createServer((req,res)=>{let u=req.url.split('?')[0];let f=path.join(SITE,u==='/'?'index.html':u);if(!path.extname(f))f=path.join(f,'index.html');fs.readFile(f,(e,d)=>{if(e){res.writeHead(404);res.end();}else{const ext=path.extname(f);const ct=ext==='.html'?'text/html':ext==='.css'?'text/css':ext==='.js'?'text/javascript':'application/octet-stream';res.writeHead(200,{'Content-Type':ct});res.end(d);}});}).listen(3456,()=>console.log('Serving on http://localhost:3456'));"],
       "port": 3456
     },
     {

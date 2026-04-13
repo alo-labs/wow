@@ -37,7 +37,7 @@
   --font-heading:     'Space Grotesk', system-ui, sans-serif;
   --font-body:        'Plus Jakarta Sans', system-ui, sans-serif;
   --font-sans:        var(--font-body);
-  --font-mono:        'Fira Code', monospace;
+  --font-mono:        'Roboto Mono', monospace;
 
   /* Legacy aliases used throughout */
   --bg:               var(--bg-page);
@@ -134,7 +134,7 @@ th {
   background: var(--surface-alt);
   color: var(--text-secondary);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: .04em;
   text-transform: uppercase;
   padding: 0.6rem 1rem;
@@ -230,7 +230,7 @@ tr:hover td { background: rgba(16,185,129,.03); }
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   color: var(--text-dim);
   padding: 0.75rem 2rem;
   border-bottom: 1px solid var(--border);
@@ -341,7 +341,7 @@ tr:hover td { background: rgba(16,185,129,.03); }
   margin: 0 auto;
 }
 .quick-links h2 {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -712,7 +712,7 @@ details[open] summary::after { transform: rotate(-180deg); }
   display: block;
   padding: 0.5rem 0.75rem;
   color: var(--text-primary);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   text-decoration: none;
   border-bottom: 1px solid var(--border);
   transition: background .15s;
