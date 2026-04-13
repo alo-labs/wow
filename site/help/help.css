@@ -34,8 +34,10 @@
   --radius:           12px;
   --radius-lg:        20px;
   --radius-sm:        8px;
-  --font-sans:        'Inter', system-ui, sans-serif;
-  --font-mono:        'JetBrains Mono', 'Fira Code', monospace;
+  --font-heading:     'Space Grotesk', system-ui, sans-serif;
+  --font-body:        'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans:        var(--font-body);
+  --font-mono:        'Fira Code', monospace;
 
   /* Legacy aliases used throughout */
   --bg:               var(--bg-page);
@@ -96,6 +98,7 @@ body {
   margin: 0;
   line-height: 1.6;
 }
+h1,h2,h3,h4,h5,h6,.logo,.section-title,.section-label,.tagline,.btn,.tag,.nav-cta,.hero-tagline-caps,.version-badge{font-family:var(--font-heading)}
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }

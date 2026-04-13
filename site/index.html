@@ -18,7 +18,7 @@
 <meta name="twitter:image" content="https://wow.alolabs.dev/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ───── RESET ───── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -52,8 +52,10 @@ html{
   --radius:12px;
   --radius-lg:20px;
   --radius-sm:8px;
-  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
+  --font-heading:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --font-sans:var(--font-body);
+  --font-mono:'Fira Code',monospace;
   --shadow-lg:0 20px 60px rgba(0,0,0,.08);
   --shadow-glow:0 0 40px rgba(16,185,129,.06);
   --nav-bg:rgba(248,249,252,.9);
@@ -103,6 +105,7 @@ body{
   line-height:1.7;
   overflow-x:hidden;
 }
+h1,h2,h3,h4,h5,h6,.logo,.section-title,.section-label,.tagline,.btn,.tag,.nav-cta,.hero-tagline-caps,.version-badge{font-family:var(--font-heading)}
 
 /* ───── UTILITIES ───── */
 .container{max-width:1200px;margin:0 auto;padding:0 clamp(12px,calc(12px + 12*(100vw - 375px)/905),24px)}
