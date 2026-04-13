@@ -39,6 +39,12 @@
   --font-sans:        var(--font-body);
   --font-mono:        'Roboto Mono', monospace;
 
+  /* Derived accent tokens */
+  --table-row-hover:  rgba(16,185,129,.03);
+
+  /* Text on colored/accent backgrounds */
+  --text-inverse:     #fff;
+
   /* Legacy aliases used throughout */
   --bg:               var(--bg-page);
   --surface:          #f9fafb;
@@ -75,6 +81,12 @@
   --amber:            #fbbf24;
   --red:              #f87171;
   --cyan:             #22d3ee;
+
+  /* Derived accent tokens */
+  --table-row-hover:  rgba(52,211,153,.04);
+
+  /* Text on colored/accent backgrounds */
+  --text-inverse:     #fff;
 
   --bg:               var(--bg-page);
   --surface:          #1e293b;
@@ -146,8 +158,8 @@ td {
   vertical-align: top;
 }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(16,185,129,.03); }
-[data-theme="dark"] tr:hover td { background: rgba(52,211,153,.04); }
+tr:hover td { background: var(--table-row-hover); }
+[data-theme="dark"] tr:hover td { background: var(--table-row-hover); }
 
 /* ─── Site Nav ──────────────────────────────────────────────────────── */
 .site-nav {
@@ -293,7 +305,7 @@ tr:hover td { background: rgba(16,185,129,.03); }
   border-left: none;
   border-radius: 0 999px 999px 0;
   background: var(--accent);
-  color: #fff;
+  color: var(--text-inverse);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -495,14 +507,14 @@ tr:hover td { background: rgba(16,185,129,.03); }
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   background: var(--accent);
-  color: #fff;
+  color: var(--text-inverse);
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
   transition: opacity .15s;
 }
-.callout-btn:hover { opacity: .85; text-decoration: none; color: #fff; }
+.callout-btn:hover { opacity: .85; text-decoration: none; color: var(--text-inverse); }
 
 /* ─── Doc Layout (Article Pages) ───────────────────────────────────── */
 .article-hero {
