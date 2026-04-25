@@ -1,0 +1,31 @@
+{
+  "name": "alo-labs",
+  "owner": {
+    "name": "Ālo Labs",
+    "email": "hello@alolabs.io"
+  },
+  "metadata": {
+    "description": "WOW — WordPress optimization plugin for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "wow",
+      "source": {
+        "source": "github",
+        "repo": "alo-labs/wow"
+      },
+      "description": "WOW — WordPress → Optimized WordPress. Autonomous Claude Code plugin for world-class WordPress performance optimization.",
+      "version": "0.1.2026040201",
+      "author": {
+        "name": "Ālo Labs",
+        "url": "https://alolabs.dev"
+      },
+      "homepage": "https://alolabs.dev",
+      "repository": "https://github.com/alo-labs/wow",
+      "license": "MIT",
+      "keywords": ["wordpress", "optimization", "performance", "core-web-vitals", "autonomous"],
+      "category": "development",
+      "strict": true
+    }
+  ]
+}
